@@ -1,0 +1,6 @@
+2025-11-29 10:45:14 | PUtSeleniumTests.test_p_ut_01_alta_basica | OK | screenshot: C:\Users\micha\Documentos\DUOCUC\8voBimestre\Calidad de Software\system\calidadsoftware\core\tests\P-UT-01.png
+2025-11-29 10:45:39 | PUtSeleniumTests.test_p_ut_02_codigo_duplicado | OK | screenshot: C:\Users\micha\Documentos\DUOCUC\8voBimestre\Calidad de Software\system\calidadsoftware\core\tests\P-UT-02.png
+2025-11-29 10:46:06 | PUtSeleniumTests.test_p_ut_03_codigo_formato_invalido | OK | screenshot: C:\Users\micha\Documentos\DUOCUC\8voBimestre\Calidad de Software\system\calidadsoftware\core\tests\P-UT-03.png
+2025-11-29 10:57:09 | PUtSeleniumTests.test_p_ut_01_alta_basica | OK | screenshot: C:\Users\micha\Documentos\DUOCUC\8voBimestre\Calidad de Software\system\calidadsoftware\core\tests\P-UT-01.png
+2025-11-29 10:57:35 | PUtSeleniumTests.test_p_ut_02_codigo_duplicado | OK | screenshot: C:\Users\micha\Documentos\DUOCUC\8voBimestre\Calidad de Software\system\calidadsoftware\core\tests\P-UT-02.png
+2025-11-29 10:58:01 | PUtSeleniumTests.test_p_ut_03_codigo_formato_invalido | OK | screenshot: C:\Users\micha\Documentos\DUOCUC\8voBimestre\Calidad de Software\system\calidadsoftware\core\tests\P-UT-03.png

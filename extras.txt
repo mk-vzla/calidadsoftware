@@ -8,3 +8,9 @@ continuar eliminación mysqlworkbench:                         DELETE FROM djang
 Preparar migrations core:                      python manage.py makemigrations core
 Migrar core:                                   python manage.py migrate core
 python manage.py makemigrations       //       python manage.py migrate    //  
+
+
+
+
+$env:HEADLESS = '0'; python manage.py test core.tests.test_p_ut_selenium; Remove-Item Env:HEADLESS
+$env:HEADLESS = '0'; python manage.py test core.tests.test_stock_selenium; Remove-Item Env:HEADLESS

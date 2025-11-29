@@ -197,7 +197,12 @@ def agregar_producto(request):
     try:
         cantidad = int(cantidad_raw)
         if cantidad < 0:
-            raise ValueError
+            # Cuando la cantidad enviada es negativa, cancelar la operación
+            msg = 'operacion cancelada, stock sin modificación'
+            if wants_json:
+                return JsonResponse({'error': msg}, status=400)
+            messages.error(request, msg)
+            return redirect('producto-list')
     except (ValueError, TypeError):
         msg = 'La cantidad debe ser un número entero mayor o igual a 0.'
         if wants_json:
@@ -592,7 +597,7 @@ def actualizar_producto(request, producto_id):
                 if diff != 0:
                     # Bloquear si el nuevo stock sería negativo (no permitir dejar stock < 0)
                     if cantidad < 0:
-                        msg = 'No se puede establecer una cantidad negativa en stock.'
+                        msg = 'operacion cancelada, stock sin modificación'
                         if wants_json:
                             return JsonResponse({'error': msg}, status=400)
                         messages.error(request, msg)
