@@ -5,9 +5,42 @@ from django.contrib import messages
 from django.db import IntegrityError, transaction
 from django.core.exceptions import ValidationError
 from django.http import JsonResponse
+import json
 
 from .models import Producto, Categoria, MovimientoInventario, Stock, Usuario
+from .decorators import require_session
 from django.db.models import Q
+
+
+def _format_cambios_readable(cambios):
+    """Convierte el dict `cambios` en una cadena legible en español.
+
+    Espera un dict con claves de campo y valores {'antes': ..., 'despues': ...}.
+    Devuelve por ejemplo: "Cambios: Precio 500 a 201, Nombre asdf a asdfaa".
+    """
+    if not cambios:
+        return ''
+    parts = []
+    # mapeo de campos internos a etiquetas legibles
+    labels = {
+        'precio': 'Precio',
+        'nombre': 'Nombre',
+        'descripcion': 'Descripción',
+        'categoria': 'Categoría',
+        'cantidad': 'Cantidad',
+    }
+    for field, vals in cambios.items():
+        antes = vals.get('antes') if isinstance(vals, dict) else None
+        despues = vals.get('despues') if isinstance(vals, dict) else None
+        label = labels.get(field, field.capitalize())
+        # handle category specially if dict with id/nombre
+        if field == 'categoria':
+            name_before = antes.get('nombre') if isinstance(antes, dict) else (antes or '')
+            name_after = despues.get('nombre') if isinstance(despues, dict) else (despues or '')
+            parts.append(f"{label} {name_before or '(ninguna)'} a {name_after or '(ninguna)'}")
+        else:
+            parts.append(f"{label} {antes if antes is not None else '(ninguno)'} a {despues if despues is not None else '(ninguno)'}")
+    return 'Cambios: ' + ', '.join(parts)
 
 
 # Create your views here.
@@ -85,6 +118,7 @@ def _get_session_usuario(request):
         return None
 
 
+@require_session
 def agregar_producto(request):
     """Procesa el POST del modal para crear un nuevo Producto.
 
@@ -103,7 +137,6 @@ def agregar_producto(request):
 
     # Soportar envío JSON (application/json) y form-data
     if wants_json and request.content_type == 'application/json':
-        import json
         try:
             payload = json.loads(request.body.decode('utf-8') or '{}')
         except Exception:
@@ -123,8 +156,17 @@ def agregar_producto(request):
         cantidad_raw = request.POST.get('cantidad')
 
     # Validaciones básicas (incluye cantidad)
-    if not (codigo and nombre and descripcion and categoria_id is not None and precio_raw is not None and cantidad_raw is not None):
+    # Comprobar campos obligatorios por separado para mensajes más precisos
+    if not (codigo and nombre and descripcion and precio_raw is not None and cantidad_raw is not None):
         msg = 'Todos los campos son obligatorios.'
+        if wants_json:
+            return JsonResponse({'error': msg}, status=400)
+        messages.error(request, msg)
+        return redirect('producto-list')
+
+    # Mensaje específico cuando falta la categoría (null/empty)
+    if categoria_id in (None, ''):
+        msg = 'Categoría requerida'
         if wants_json:
             return JsonResponse({'error': msg}, status=400)
         messages.error(request, msg)
@@ -133,7 +175,7 @@ def agregar_producto(request):
     try:
         categoria = Categoria.objects.get(id_categoria=categoria_id)
     except Categoria.DoesNotExist:
-        msg = 'Categoría no encontrada.'
+        msg = 'Categoría requerida'
         if wants_json:
             return JsonResponse({'error': msg}, status=400)
         messages.error(request, msg)
@@ -194,12 +236,20 @@ def agregar_producto(request):
             # Crear stock inicial con la cantidad proporcionada y registrar movimiento de ALTA
             Stock.objects.create(producto=producto, cantidad=cantidad)
             mov_usuario = _get_session_usuario(request)
+            # Registrar movimiento ALTA con resumen que incluye el estado 'antes' (null) y 'despues' (nuevo estado)
+            nuevo_estado = {
+                'nombre': producto.nombre,
+                'codigo': producto.codigo_producto,
+                'categoria': {'id': categoria.id_categoria, 'nombre': categoria.nombre} if categoria else None,
+                'precio': producto.precio,
+                'cantidad': cantidad,
+            }
             MovimientoInventario.objects.create(
                 producto=producto,
                 usuario_id=(mov_usuario.id_usuario if mov_usuario else None),
                 cantidad=cantidad,
                 tipo='ALTA',
-                resumen_operacion='alta',
+                resumen_operacion=json.dumps({'antes': None, 'despues': nuevo_estado}, ensure_ascii=False),
                 producto_nombre=producto.nombre,
                 producto_codigo=producto.codigo_producto,
             )
@@ -287,6 +337,10 @@ def obtener_producto_json(request, producto_id):
     except Producto.DoesNotExist:
         return JsonResponse({'error': 'Producto no encontrado'}, status=404)
 
+    # Incluir lista de categorías para que el cliente pueda rellenar el <select>
+    categorias_qs = Categoria.objects.all().order_by('nombre')
+    categorias_list = [{'id': c.id_categoria, 'nombre': c.nombre} for c in categorias_qs]
+
     data = {
         'id': producto.id_producto,
         'codigo_producto': producto.codigo_producto,
@@ -295,10 +349,19 @@ def obtener_producto_json(request, producto_id):
         'categoria': producto.categoria.id_categoria if producto.categoria else None,
         'precio': producto.precio,
         'cantidad': producto.cantidad,
+        'categorias': categorias_list,
     }
     return JsonResponse(data)
 
 
+def categorias_json(request):
+    """Devuelve la lista de categorías en JSON (id, nombre)."""
+    qs = Categoria.objects.all().order_by('nombre')
+    data = [{'id': c.id_categoria, 'nombre': c.nombre} for c in qs]
+    return JsonResponse({'categorias': data})
+
+
+@require_session
 def eliminar_producto(request, producto_id):
     """Elimina un producto identificado por `producto_id`.
 
@@ -327,7 +390,16 @@ def eliminar_producto(request, producto_id):
                 usuario_id=(mov_usuario.id_usuario if mov_usuario else None),
                 cantidad=baja_cantidad,
                 tipo='BAJA',
-                resumen_operacion=f'baja {producto.codigo_producto}',
+                resumen_operacion=json.dumps({
+                    'antes': {
+                        'nombre': producto.nombre,
+                        'codigo': producto.codigo_producto,
+                        'categoria': {'id': producto.categoria.id_categoria, 'nombre': producto.categoria.nombre} if producto.categoria else None,
+                        'precio': producto.precio,
+                        'cantidad': baja_cantidad,
+                    },
+                    'despues': None
+                }, ensure_ascii=False),
                 producto_nombre=producto.nombre,
                 producto_codigo=producto.codigo_producto,
             )
@@ -341,6 +413,7 @@ def eliminar_producto(request, producto_id):
     return redirect('producto-list')
 
 
+@require_session
 def actualizar_producto(request, producto_id):
     """Actualiza un producto a partir de POST (desde modal de edición).
 
@@ -358,7 +431,6 @@ def actualizar_producto(request, producto_id):
         wants_json = False
 
     if wants_json and request.content_type == 'application/json':
-        import json
         try:
             payload = json.loads(request.body.decode('utf-8') or '{}')
         except Exception:
@@ -378,8 +450,16 @@ def actualizar_producto(request, producto_id):
     producto = get_object_or_404(Producto, id_producto=producto_id)
 
     # Validaciones básicas
-    if not (nombre and descripcion and categoria_id is not None and precio_raw is not None and cantidad_raw is not None):
+    if not (nombre and descripcion and precio_raw is not None and cantidad_raw is not None):
         msg = 'Todos los campos son obligatorios.'
+        if wants_json:
+            return JsonResponse({'error': msg}, status=400)
+        messages.error(request, msg)
+        return redirect('producto-list')
+
+    # Mensaje específico cuando falta la categoría (null/empty)
+    if categoria_id in (None, ''):
+        msg = 'Categoría requerida'
         if wants_json:
             return JsonResponse({'error': msg}, status=400)
         messages.error(request, msg)
@@ -388,7 +468,7 @@ def actualizar_producto(request, producto_id):
     try:
         categoria = Categoria.objects.get(id_categoria=categoria_id)
     except Categoria.DoesNotExist:
-        msg = 'Categoría no encontrada.'
+        msg = 'Categoría requerida'
         if wants_json:
             return JsonResponse({'error': msg}, status=400)
         messages.error(request, msg)
@@ -461,16 +541,50 @@ def actualizar_producto(request, producto_id):
                 # Si cantidad > 0, registrar movimiento MODI (ajuste)
                 if cantidad and cantidad != 0:
                     mov_usuario = _get_session_usuario(request)
-                    MovimientoInventario.objects.create(
-                        producto=producto,
-                        usuario_id=(mov_usuario.id_usuario if mov_usuario else None),
-                        cantidad=abs(cantidad),
-                        tipo='MODI',
-                        resumen_operacion=f'stock establecido {abs(cantidad)}',
-                        producto_nombre=producto.nombre,
-                        producto_codigo=producto.codigo_producto,
-                    )
-                    mov_created = True
+                    # Construir dicts prev/new y registrar sólo los campos que cambiaron
+                    antes = {
+                        'nombre': prev_nombre,
+                        'descripcion': prev_descripcion,
+                        'categoria_id': prev_categoria_id,
+                        'precio': prev_precio,
+                        'cantidad': prev_stock,
+                    }
+                    despues = {
+                        'nombre': producto.nombre,
+                        'descripcion': producto.descripcion,
+                        'categoria_id': categoria.id_categoria if categoria else None,
+                        'precio': producto.precio,
+                        'cantidad': cantidad,
+                    }
+                    cambios = {}
+                    for k in antes.keys():
+                        if antes.get(k) != despues.get(k):
+                            if k == 'categoria_id':
+                                # expand category info
+                                before_cat = None
+                                try:
+                                    if antes.get(k):
+                                        pc = Categoria.objects.filter(id_categoria=antes.get(k)).first()
+                                        before_cat = {'id': antes.get(k), 'nombre': pc.nombre if pc else None}
+                                except Exception:
+                                    before_cat = {'id': antes.get(k)}
+                                after_cat = {'id': despues.get(k), 'nombre': categoria.nombre if categoria else None} if despues.get(k) else None
+                                cambios['categoria'] = {'antes': before_cat, 'despues': after_cat}
+                            else:
+                                cambios[k if k != 'categoria_id' else 'categoria'] = {'antes': antes.get(k), 'despues': despues.get(k)}
+
+                    if cambios:
+                        texto = _format_cambios_readable(cambios)
+                        MovimientoInventario.objects.create(
+                            producto=producto,
+                            usuario_id=(mov_usuario.id_usuario if mov_usuario else None),
+                            cantidad=abs(cantidad),
+                            tipo='MODI',
+                            resumen_operacion=texto,
+                            producto_nombre=producto.nombre,
+                            producto_codigo=producto.codigo_producto,
+                        )
+                        mov_created = True
             else:
                 # calcular diferencia
                 diff = cantidad - prev_stock
@@ -486,21 +600,48 @@ def actualizar_producto(request, producto_id):
 
                     # crear movimiento MODI con la cantidad absoluta del cambio
                     mov_usuario = _get_session_usuario(request)
-                    # construir resumen según aumento/disminución
-                    if diff > 0:
-                        resumen = f'stock aumentado {abs(diff)}'
-                    else:
-                        resumen = f'stock disminuido {abs(diff)}'
-                    MovimientoInventario.objects.create(
-                        producto=producto,
-                        usuario_id=(mov_usuario.id_usuario if mov_usuario else None),
-                        cantidad=abs(diff),
-                        tipo='MODI',
-                        resumen_operacion=resumen,
-                        producto_nombre=producto.nombre,
-                        producto_codigo=producto.codigo_producto,
-                    )
-                    mov_created = True
+                    antes = {
+                        'nombre': prev_nombre,
+                        'descripcion': prev_descripcion,
+                        'categoria_id': prev_categoria_id,
+                        'precio': prev_precio,
+                        'cantidad': prev_stock,
+                    }
+                    despues = {
+                        'nombre': producto.nombre,
+                        'descripcion': producto.descripcion,
+                        'categoria_id': categoria.id_categoria if categoria else None,
+                        'precio': producto.precio,
+                        'cantidad': cantidad,
+                    }
+                    cambios = {}
+                    for k in antes.keys():
+                        if antes.get(k) != despues.get(k):
+                            if k == 'categoria_id':
+                                before_cat = None
+                                try:
+                                    if antes.get(k):
+                                        pc = Categoria.objects.filter(id_categoria=antes.get(k)).first()
+                                        before_cat = {'id': antes.get(k), 'nombre': pc.nombre if pc else None}
+                                except Exception:
+                                    before_cat = {'id': antes.get(k)}
+                                after_cat = {'id': despues.get(k), 'nombre': categoria.nombre if categoria else None} if despues.get(k) else None
+                                cambios['categoria'] = {'antes': before_cat, 'despues': after_cat}
+                            else:
+                                cambios[k if k != 'categoria_id' else 'categoria'] = {'antes': antes.get(k), 'despues': despues.get(k)}
+
+                    if cambios:
+                        texto = _format_cambios_readable(cambios)
+                        MovimientoInventario.objects.create(
+                            producto=producto,
+                            usuario_id=(mov_usuario.id_usuario if mov_usuario else None),
+                            cantidad=abs(diff),
+                            tipo='MODI',
+                            resumen_operacion=texto,
+                            producto_nombre=producto.nombre,
+                            producto_codigo=producto.codigo_producto,
+                        )
+                        mov_created = True
                 # actualizar stock al nuevo valor
                 stock.cantidad = cantidad
                 stock.save()
@@ -515,42 +656,56 @@ def actualizar_producto(request, producto_id):
             )
             if not mov_created and other_changed:
                 mov_usuario = _get_session_usuario(request)
-                # construir resumen para otros cambios
-                cambios = []
                 try:
-                    if prev_precio != precio:
-                        dp = precio - (prev_precio or 0)
-                        if dp > 0:
-                            cambios.append(f'precio aumentado {dp}')
+                    prev_categoria_nombre = None
+                    if prev_categoria_id:
+                        prev_cat = Categoria.objects.filter(id_categoria=prev_categoria_id).first()
+                        prev_categoria_nombre = prev_cat.nombre if prev_cat else None
+                except Exception:
+                    prev_categoria_nombre = None
+
+                antes = {
+                    'nombre': prev_nombre,
+                    'descripcion': prev_descripcion,
+                    'categoria_id': prev_categoria_id,
+                    'precio': prev_precio,
+                    'cantidad': prev_stock,
+                }
+                despues = {
+                    'nombre': nombre,
+                    'descripcion': descripcion,
+                    'categoria_id': categoria.id_categoria if categoria else None,
+                    'precio': precio,
+                    'cantidad': cantidad,
+                }
+
+                cambios = {}
+                for k in antes.keys():
+                    if antes.get(k) != despues.get(k):
+                        if k == 'categoria_id':
+                            before_cat = None
+                            try:
+                                if antes.get(k):
+                                    pc = Categoria.objects.filter(id_categoria=antes.get(k)).first()
+                                    before_cat = {'id': antes.get(k), 'nombre': pc.nombre if pc else None}
+                            except Exception:
+                                before_cat = {'id': antes.get(k)}
+                            after_cat = {'id': despues.get(k), 'nombre': categoria.nombre if categoria else None} if despues.get(k) else None
+                            cambios['categoria'] = {'antes': before_cat, 'despues': after_cat}
                         else:
-                            cambios.append(f'precio disminuido {abs(dp)}')
-                except Exception:
-                    pass
-                try:
-                    if prev_nombre != nombre:
-                        cambios.append('nombre modificado')
-                except Exception:
-                    pass
-                try:
-                    if prev_descripcion != descripcion:
-                        cambios.append('descripcion modificada')
-                except Exception:
-                    pass
-                try:
-                    if prev_categoria_id != (categoria.id_categoria if categoria else None):
-                        cambios.append('categoria modificada')
-                except Exception:
-                    pass
-                resumen = '; '.join(cambios) if cambios else 'modificación'
-                MovimientoInventario.objects.create(
-                    producto=producto,
-                    usuario_id=(mov_usuario.id_usuario if mov_usuario else None),
-                    cantidad=0,
-                    tipo='MODI',
-                    resumen_operacion=resumen,
-                    producto_nombre=producto.nombre,
-                    producto_codigo=producto.codigo_producto,
-                )
+                            cambios[k if k != 'categoria_id' else 'categoria'] = {'antes': antes.get(k), 'despues': despues.get(k)}
+
+                if cambios:
+                    texto = _format_cambios_readable(cambios)
+                    MovimientoInventario.objects.create(
+                        producto=producto,
+                        usuario_id=(mov_usuario.id_usuario if mov_usuario else None),
+                        cantidad=0,
+                        tipo='MODI',
+                        resumen_operacion=texto,
+                        producto_nombre=producto.nombre,
+                        producto_codigo=producto.codigo_producto,
+                    )
 
     except ValidationError as e:
         errores = []

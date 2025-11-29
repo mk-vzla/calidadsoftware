@@ -63,6 +63,34 @@ document.addEventListener('DOMContentLoaded', function () {
 			const letter = nombre.value.trim().charAt(0).toUpperCase();
 			requestNextCode(letter);
 		}
+
+		// Asegurar que el <select> de categorías esté poblado (si el template no lo hizo)
+		var categoriaSelect = document.getElementById('categoria');
+		if (categoriaSelect) {
+			// hay una opción por defecto; si no hay otras opciones, solicitar al servidor
+			if (categoriaSelect.options.length <= 1) {
+				fetch('/core/categorias/json/')
+					.then(function (resp) { if (!resp.ok) throw new Error('network'); return resp.json(); })
+					.then(function (data) {
+						if (!data || !Array.isArray(data.categorias)) return;
+						// rebuild options: placeholder + categories
+						categoriaSelect.innerHTML = '';
+						var placeholder = document.createElement('option');
+						placeholder.value = '';
+						placeholder.disabled = true;
+						placeholder.selected = true;
+						placeholder.textContent = 'Seleccione una categoría';
+						categoriaSelect.appendChild(placeholder);
+						data.categorias.forEach(function (c) {
+							var opt = document.createElement('option');
+							opt.value = c.id;
+							opt.textContent = c.nombre;
+							categoriaSelect.appendChild(opt);
+						});
+					})
+					.catch(function () { /* fail silently - fallback will show placeholder */ });
+			}
+		}
 		});
 	}
 
@@ -141,7 +169,25 @@ document.addEventListener('DOMContentLoaded', function () {
 							if (modCodigo) modCodigo.value = data.codigo_producto || '';
 							if (modNombre) modNombre.value = data.nombre || '';
 							if (modDescripcion) modDescripcion.value = data.descripcion || '';
-							if (modCategoria) modCategoria.value = data.categoria || '';
+							if (modCategoria) {
+								if (modCategoria.options.length <= 1 && Array.isArray(data.categorias)) {
+									// populate with placeholder + categories
+									modCategoria.innerHTML = '';
+									var placeholder = document.createElement('option');
+									placeholder.value = '';
+									placeholder.disabled = true;
+									placeholder.textContent = 'Seleccione una categoría';
+									modCategoria.appendChild(placeholder);
+									data.categorias.forEach(function (c) {
+										var opt = document.createElement('option');
+										opt.value = c.id;
+										opt.textContent = c.nombre;
+										modCategoria.appendChild(opt);
+									});
+								}
+								// set selected value (if category exists)
+								try { modCategoria.value = data.categoria != null ? String(data.categoria) : ''; } catch (e) { /* noop */ }
+							}
 							if (modPrecio) modPrecio.value = data.precio != null ? data.precio : '';
 							if (modCantidad) modCantidad.value = data.cantidad != null ? data.cantidad : '';
 						})

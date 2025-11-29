@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse
 import json
 
-from core.models import Usuario, Producto
+from core.models import Usuario, Producto, Categoria
+from django.db.models import Q
 
 
 def index(request):
@@ -17,13 +18,15 @@ def main(request):
 	productos_qs = Producto.objects.select_related('categoria').all()
 	if q:
 		productos_qs = productos_qs.filter(
-			models.Q(codigo_producto__icontains=q) | models.Q(nombre__icontains=q)
+			Q(codigo_producto__icontains=q) | Q(nombre__icontains=q)
 		)
 
 	productos = list(productos_qs)
+	categorias = Categoria.objects.all()
 	context = {
 		'productos': productos,
 		'q': q,
+		'categorias': categorias,
 	}
 	return render(request, 'main.html', context)
 
@@ -53,10 +56,10 @@ def usuarios_login(request):
 	try:
 		usuario = Usuario.objects.get(usuario=username)
 	except Usuario.DoesNotExist:
-		return JsonResponse({'error': 'Credenciales inválidas'}, status=400)
+		return JsonResponse({'error': 'Credenciales inválidas'}, status=401)
 
 	if not usuario.check_password(password):
-		return JsonResponse({'error': 'Credenciales inválidas'}, status=400)
+		return JsonResponse({'error': 'Credenciales inválidas'}, status=401)
 
 	# Autenticado: guardar id en sesión para que el context processor lo lea
 	request.session['conectado_usuario'] = usuario.id_usuario

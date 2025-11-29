@@ -152,3 +152,7 @@ MESSAGE_TAGS = {
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# Sesión: expirar por inactividad después de 15 minutos
+SESSION_COOKIE_AGE = 15 * 60  # 15 minutos en segundos
+# Al poner True, la cookie de sesión se renueva en cada petición activa (sliding expiration)
+SESSION_SAVE_EVERY_REQUEST = True

@@ -17,6 +17,8 @@ urlpatterns = [
         path('producto/update/<int:producto_id>/', views.actualizar_producto, name='producto-update'),
     # Endpoint JSON para obtener los datos de un producto
     path('producto/json/<int:producto_id>/', views.obtener_producto_json, name='producto-json'),
+    # Endpoint JSON para obtener lista de categorias
+    path('categorias/json/', views.categorias_json, name='categoria-json'),
     # Lista de categorías en /core/categorias/
     path('categorias/', views.listar_categorias, name='categoria-list'),
     # Lista de usuarios en /core/usuarios/
