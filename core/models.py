@@ -113,6 +113,7 @@ class MovimientoInventario(models.Model):
     # Campos redundantes para auditoría: se rellenan al crear el movimiento
     producto_nombre = models.CharField(max_length=200, null=True, blank=True)
     producto_codigo = models.CharField(max_length=10, null=True, blank=True)
+    resumen_operacion = models.TextField(null=True, blank=True)
     tipo = models.CharField(max_length=8, choices=TIPO_MOV)
     fecha = models.DateTimeField(auto_now_add=True)
 

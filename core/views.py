@@ -6,7 +6,7 @@ from django.db import IntegrityError, transaction
 from django.core.exceptions import ValidationError
 from django.http import JsonResponse
 
-from .models import Producto, Categoria, MovimientoInventario, Stock
+from .models import Producto, Categoria, MovimientoInventario, Stock, Usuario
 from django.db.models import Q
 
 
@@ -67,6 +67,22 @@ def listar_usuarios(request):
         'q': q,
     }
     return render(request, 'usuarios.html', contexto)
+
+
+def _get_session_usuario(request):
+    """Devuelve la instancia `Usuario` guardada en sesión (`conectado_usuario`) o None."""
+    session_uid = request.session.get('conectado_usuario')
+    if not session_uid:
+        return None
+    try:
+        return Usuario.objects.get(id_usuario=session_uid)
+    except Usuario.DoesNotExist:
+        # limpiar sesión si el id es inválido
+        try:
+            request.session.flush()
+        except Exception:
+            pass
+        return None
 
 
 def agregar_producto(request):
@@ -177,11 +193,13 @@ def agregar_producto(request):
             producto.save()
             # Crear stock inicial con la cantidad proporcionada y registrar movimiento de ALTA
             Stock.objects.create(producto=producto, cantidad=cantidad)
+            mov_usuario = _get_session_usuario(request)
             MovimientoInventario.objects.create(
                 producto=producto,
-                usuario=None,
+                usuario_id=(mov_usuario.id_usuario if mov_usuario else None),
                 cantidad=cantidad,
                 tipo='ALTA',
+                resumen_operacion='alta',
                 producto_nombre=producto.nombre,
                 producto_codigo=producto.codigo_producto,
             )
@@ -289,11 +307,13 @@ def eliminar_producto(request, producto_id):
     try:
         with transaction.atomic():
             # Registrar movimiento de BAJA (guardar también nombre y código para auditoría)
+            mov_usuario = _get_session_usuario(request)
             MovimientoInventario.objects.create(
                 producto=producto,
-                usuario=None,
+                usuario_id=(mov_usuario.id_usuario if mov_usuario else None),
                 cantidad=baja_cantidad,
                 tipo='BAJA',
+                resumen_operacion=f'baja {producto.codigo_producto}',
                 producto_nombre=producto.nombre,
                 producto_codigo=producto.codigo_producto,
             )
@@ -401,6 +421,14 @@ def actualizar_producto(request, producto_id):
                 stock = None
                 prev_stock = None
 
+            # Capturar valores previos de otros campos para detectar modificaciones
+            prev_nombre = producto.nombre
+            prev_descripcion = producto.descripcion
+            prev_categoria_id = producto.categoria.id_categoria if producto.categoria else None
+            prev_precio = producto.precio
+
+            # Valores previos y entrantes (debug removido)
+
             # Actualizar campos del producto
             producto.nombre = nombre
             producto.descripcion = descripcion
@@ -412,22 +440,27 @@ def actualizar_producto(request, producto_id):
             producto.save()
 
             # Actualizar / crear stock
+            mov_created = False
             if stock is None:
                 # crear stock nuevo
                 stock = Stock.objects.create(producto=producto, cantidad=cantidad)
                 # Si cantidad > 0, registrar movimiento MODI (ajuste)
                 if cantidad and cantidad != 0:
+                    mov_usuario = _get_session_usuario(request)
                     MovimientoInventario.objects.create(
                         producto=producto,
-                        usuario=(request.user if hasattr(request, 'user') and request.user.is_authenticated else None),
+                        usuario_id=(mov_usuario.id_usuario if mov_usuario else None),
                         cantidad=abs(cantidad),
                         tipo='MODI',
+                        resumen_operacion=f'stock establecido {abs(cantidad)}',
                         producto_nombre=producto.nombre,
                         producto_codigo=producto.codigo_producto,
                     )
+                    mov_created = True
             else:
                 # calcular diferencia
                 diff = cantidad - prev_stock
+                # cálculo de diferencia (debug removido)
                 if diff != 0:
                     # Bloquear si el nuevo stock sería negativo (no permitir dejar stock < 0)
                     if cantidad < 0:
@@ -438,17 +471,72 @@ def actualizar_producto(request, producto_id):
                         return redirect('producto-list')
 
                     # crear movimiento MODI con la cantidad absoluta del cambio
+                    mov_usuario = _get_session_usuario(request)
+                    # construir resumen según aumento/disminución
+                    if diff > 0:
+                        resumen = f'stock aumentado {abs(diff)}'
+                    else:
+                        resumen = f'stock disminuido {abs(diff)}'
                     MovimientoInventario.objects.create(
                         producto=producto,
-                        usuario=(request.user if hasattr(request, 'user') and request.user.is_authenticated else None),
+                        usuario_id=(mov_usuario.id_usuario if mov_usuario else None),
                         cantidad=abs(diff),
                         tipo='MODI',
+                        resumen_operacion=resumen,
                         producto_nombre=producto.nombre,
                         producto_codigo=producto.codigo_producto,
                     )
+                    mov_created = True
                 # actualizar stock al nuevo valor
                 stock.cantidad = cantidad
                 stock.save()
+
+            # Si no creamos movimiento por cambio de cantidad, pero sí cambiaron otros campos,
+            # registrar un movimiento MODI con cantidad=0 para auditar la modificación.
+            other_changed = (
+                prev_nombre != nombre or
+                prev_descripcion != descripcion or
+                prev_categoria_id != (categoria.id_categoria if categoria else None) or
+                prev_precio != precio
+            )
+            if not mov_created and other_changed:
+                mov_usuario = _get_session_usuario(request)
+                # construir resumen para otros cambios
+                cambios = []
+                try:
+                    if prev_precio != precio:
+                        dp = precio - (prev_precio or 0)
+                        if dp > 0:
+                            cambios.append(f'precio aumentado {dp}')
+                        else:
+                            cambios.append(f'precio disminuido {abs(dp)}')
+                except Exception:
+                    pass
+                try:
+                    if prev_nombre != nombre:
+                        cambios.append('nombre modificado')
+                except Exception:
+                    pass
+                try:
+                    if prev_descripcion != descripcion:
+                        cambios.append('descripcion modificada')
+                except Exception:
+                    pass
+                try:
+                    if prev_categoria_id != (categoria.id_categoria if categoria else None):
+                        cambios.append('categoria modificada')
+                except Exception:
+                    pass
+                resumen = '; '.join(cambios) if cambios else 'modificación'
+                MovimientoInventario.objects.create(
+                    producto=producto,
+                    usuario_id=(mov_usuario.id_usuario if mov_usuario else None),
+                    cantidad=0,
+                    tipo='MODI',
+                    resumen_operacion=resumen,
+                    producto_nombre=producto.nombre,
+                    producto_codigo=producto.codigo_producto,
+                )
 
     except ValidationError as e:
         errores = []

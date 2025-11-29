@@ -21,7 +21,11 @@
 			</ul>
 
 			<form class="d-flex" role="search" method="get" action="/core/producto/">
-				<button type="button" class="btn btn-outline-light" onclick="location.href='{% url 'index' %}'" aria-label="Cerrar sesión">Cerrar sesión</button>
+				{% if session_user_is_authenticated %}
+					<a class="btn btn-outline-light" href="{% url 'usuarios-logout' %}" aria-label="Cerrar sesión">Cerrar sesión</a>
+				{% else %}
+					<a class="btn btn-outline-light" href="{% url 'index' %}">Iniciar sesión</a>
+				{% endif %}
 			</form>
 		</div>
 	</div>
