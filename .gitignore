@@ -8,6 +8,7 @@ __pycache__/
 unitarias-preview.txt
 *a_usuario.py
 init_sql.sql
+extras.txt
 
 # Virtual env
 .venv/
