@@ -60,7 +60,7 @@ def validar_codigo_producto(value):
     patron = r'^[A-Z][0-9]{3}$'
     if not re.match(patron, value):
         raise ValidationError(
-            "El código debe comenzar con una letra y contener 3 dígitos. Ej.: M001"
+            "Código debe ser 1 letra + 3 dígitos"
         )
 
 

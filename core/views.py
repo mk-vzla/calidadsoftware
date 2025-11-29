@@ -217,6 +217,19 @@ def agregar_producto(request):
         messages.error(request, msg)
         return redirect('producto-list')
     except IntegrityError:
+        # Posible condición de carrera: si otro request creó el mismo código/nombre
+        if Producto.objects.filter(codigo_producto=codigo).exists():
+            msg = f'El código {codigo} ya existe.'
+            if wants_json:
+                return JsonResponse({'error': msg}, status=409)
+            messages.error(request, msg)
+            return redirect('producto-list')
+        if Producto.objects.filter(nombre__iexact=nombre).exists():
+            msg = f'Ya existe un producto con el nombre "{nombre}".'
+            if wants_json:
+                return JsonResponse({'error': msg}, status=409)
+            messages.error(request, msg)
+            return redirect('producto-list')
         msg = 'Error de integridad al crear el producto.'
         if wants_json:
             return JsonResponse({'error': msg}, status=500)
@@ -233,6 +246,7 @@ def agregar_producto(request):
             'descripcion': producto.descripcion,
             'categoria': producto.categoria.id_categoria,
             'precio': producto.precio,
+            'cantidad': producto.cantidad,
         }
         return JsonResponse(data, status=201)
     messages.success(request, success_msg)
