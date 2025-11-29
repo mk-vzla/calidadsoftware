@@ -104,13 +104,15 @@ class MovimientoInventario(models.Model):
     TIPO_MOV = [
         ("ALTA", "Alta"),
         ("BAJA", "Baja"),
-        ("AJUSTE+", "Ajuste positivo"),
-        ("AJUSTE-", "Ajuste negativo"),
+        ("MODI", "Modificación"),
     ]
 
-    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
+    producto = models.ForeignKey(Producto, on_delete=models.SET_NULL, null=True)
     usuario = models.ForeignKey(Usuario, on_delete=models.SET_NULL, null=True)
     cantidad = models.IntegerField()
+    # Campos redundantes para auditoría: se rellenan al crear el movimiento
+    producto_nombre = models.CharField(max_length=200, null=True, blank=True)
+    producto_codigo = models.CharField(max_length=10, null=True, blank=True)
     tipo = models.CharField(max_length=8, choices=TIPO_MOV)
     fecha = models.DateTimeField(auto_now_add=True)
 
@@ -118,7 +120,12 @@ class MovimientoInventario(models.Model):
         ordering = ["-fecha"]
 
     def __str__(self):
-        return f"{self.tipo} | {self.producto.nombre} | {self.cantidad}"
+        # Mostrar el nombre ya guardado si existe, sino el relacionado (o '(eliminado)')
+        if self.producto_nombre:
+            prod_nombre = self.producto_nombre
+        else:
+            prod_nombre = self.producto.nombre if self.producto else '(eliminado)'
+        return f"{self.tipo} | {prod_nombre} | {self.cantidad}"
 
 
 # ------------------------

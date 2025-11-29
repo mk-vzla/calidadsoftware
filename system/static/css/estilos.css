@@ -57,6 +57,44 @@ body::before{
 }
 .site-icon{display:block;margin:0 auto;color:var(--accent);font-size:44px}
 
+/* Search form styling inside the product card */
+.product-card .search-form .input-group{
+	display:flex;
+	align-items:center;
+}
+.product-card .search-form .form-control{
+	border-radius:6px 0 0 6px;
+	padding:6px 10px;
+	min-width:220px;
+}
+.product-card .search-form .form-control::placeholder{
+	color: rgba(0,0,0,0.5);
+}
+.product-card .search-form .btn{
+	border-radius:0 6px 6px 0;
+	height:34px;
+	display:flex;
+	align-items:center;
+	justify-content:center;
+}
+.product-card .search-form .btn-icon{
+	width:36px;
+	padding:0 8px;
+}
+.product-card .search-form .btn-outline-light{
+	color: #0b1220;
+	background: rgba(255,255,255,0.95);
+	border-color: rgba(255,255,255,0.06);
+}
+.product-card .search-form .btn-outline-secondary{
+	margin-left:6px;
+	border-radius:6px;
+}
+
+@media (max-width:720px){
+	.product-card .search-form .form-control{min-width:120px}
+}
+
 .login-form .form-group{margin-bottom:14px}
 .login-form label{display:block;color:var(--muted);font-size:13px;margin-bottom:6px}
 .login-form .form-control{

@@ -1,0 +1,72 @@
+{% load static %}
+<!-- Modal Bootstrap: Modificar Producto (igual formato que Agregar) -->
+<div class="modal fade" id="modificarProductoModal" tabindex="-1" aria-labelledby="modificarProductoLabel" aria-hidden="true" data-next-code-template="{% url 'producto-next-code' 'X' %}">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content bg-dark text-white">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modificarProductoLabel">Modificar Producto</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="formModificarProducto" method="post" action="#" novalidate>
+        {% csrf_token %}
+        <div class="modal-body">
+          <div class="container-fluid">
+            <div class="row g-3">
+              <div class="col-md-4">
+                <label for="mod_codigo_producto" class="form-label">Código</label>
+                <input
+                    type="text"
+                    class="form-control"
+                    id="mod_codigo_producto"
+                    name="codigo_producto"
+                    maxlength="4"
+                    pattern="[A-Z][0-9]{3}"
+                    placeholder="M001"
+                    readonly
+                    aria-readonly="true"
+                    style="background-color:#e0e0e0;color:#b30000;font-weight:700;border-color:#c0c0c0;opacity:1;pointer-events:none;">
+              </div>
+
+              <div class="col-md-8">
+                <label for="mod_nombre" class="form-label">Nombre</label>
+                <input type="text" class="form-control" id="mod_nombre" name="nombre" maxlength="200" required>
+              </div>
+
+              <div class="col-12">
+                <label for="mod_descripcion" class="form-label">Descripción</label>
+                <textarea class="form-control" id="mod_descripcion" name="descripcion" rows="3" required></textarea>
+              </div>
+
+              <div class="col-md-4">
+                <label for="mod_categoria" class="form-label">Categoría</label>
+                <select id="mod_categoria" name="categoria" class="form-select" required>
+                  <option value="" disabled>Seleccione una categoría</option>
+                  {% if categorias %}
+                    {% for cat in categorias %}
+                      <option value="{{ cat.id_categoria }}">{{ cat.nombre }}</option>
+                    {% endfor %}
+                  {% endif %}
+                </select>
+              </div>
+
+              <div class="col-md-4">
+                <label for="mod_precio" class="form-label">Precio</label>
+                <input type="number" min="0" step="1" class="form-control" id="mod_precio" name="precio" required>
+              </div>
+
+              <div class="col-md-4">
+                <label for="mod_cantidad" class="form-label">Cantidad</label>
+                <input type="number" min="0" step="1" class="form-control" id="mod_cantidad" name="cantidad" required>
+                <div class="form-text">Cantidad en stock (entero &ge; 0)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Guardar cambios</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -7,6 +7,7 @@ from django.core.exceptions import ValidationError
 from django.http import JsonResponse
 
 from .models import Producto, Categoria, MovimientoInventario, Stock
+from django.db.models import Q
 
 
 # Create your views here.
@@ -20,7 +21,14 @@ def obtener_productos(request, producto_id=None):
     if producto_id:
         raise Http404('Acceso directo a detalle de producto no permitido')
     else:
-        productos = Producto.objects.all()
+        # Soportar búsqueda por query string ?q=texto (por código o nombre)
+        q = request.GET.get('q', '').strip()
+        if q:
+            productos = Producto.objects.filter(
+                Q(codigo_producto__icontains=q) | Q(nombre__icontains=q)
+            ).order_by('codigo_producto')
+        else:
+            productos = Producto.objects.all().order_by('codigo_producto')
 
     # También pasamos las categorías para poblar el modal de creación
     categorias = Categoria.objects.all()
@@ -28,6 +36,7 @@ def obtener_productos(request, producto_id=None):
     contexto = {
         'productos': productos,
         'categorias': categorias,
+        'q': q if 'q' in locals() else '',
     }
     return render(request, 'main.html', contexto)
 
@@ -44,9 +53,18 @@ def listar_categorias(request):
 def listar_usuarios(request):
     """Renderiza la página `usuarios.html` cargando todos los usuarios."""
     from .models import Usuario
-    usuarios = Usuario.objects.all()
+    # Soportar búsqueda por query string ?q=texto (por usuario o nombres)
+    q = request.GET.get('q', '').strip()
+    if q:
+        usuarios = Usuario.objects.filter(
+            Q(usuario__icontains=q) | Q(nombres__icontains=q)
+        ).order_by('id_usuario')
+    else:
+        usuarios = Usuario.objects.all().order_by('id_usuario')
+
     contexto = {
-        'usuarios': usuarios
+        'usuarios': usuarios,
+        'q': q,
     }
     return render(request, 'usuarios.html', contexto)
 
@@ -79,15 +97,17 @@ def agregar_producto(request):
         descripcion = str(payload.get('descripcion', '') or '').strip()
         categoria_id = payload.get('categoria')
         precio_raw = payload.get('precio')
+        cantidad_raw = payload.get('cantidad')
     else:
         codigo = request.POST.get('codigo_producto', '').strip().upper()
         nombre = request.POST.get('nombre', '').strip()
         descripcion = request.POST.get('descripcion', '').strip()
         categoria_id = request.POST.get('categoria')
         precio_raw = request.POST.get('precio')
+        cantidad_raw = request.POST.get('cantidad')
 
-    # Validaciones básicas
-    if not (codigo and nombre and descripcion and categoria_id is not None and precio_raw is not None):
+    # Validaciones básicas (incluye cantidad)
+    if not (codigo and nombre and descripcion and categoria_id is not None and precio_raw is not None and cantidad_raw is not None):
         msg = 'Todos los campos son obligatorios.'
         if wants_json:
             return JsonResponse({'error': msg}, status=400)
@@ -108,8 +128,20 @@ def agregar_producto(request):
         precio = int(precio_raw)
         if precio < 0:
             raise ValueError
-    except ValueError:
+    except (ValueError, TypeError):
         msg = 'El precio debe ser un número entero mayor o igual a 0.'
+        if wants_json:
+            return JsonResponse({'error': msg}, status=400)
+        messages.error(request, msg)
+        return redirect('producto-list')
+
+    # validar cantidad
+    try:
+        cantidad = int(cantidad_raw)
+        if cantidad < 0:
+            raise ValueError
+    except (ValueError, TypeError):
+        msg = 'La cantidad debe ser un número entero mayor o igual a 0.'
         if wants_json:
             return JsonResponse({'error': msg}, status=400)
         messages.error(request, msg)
@@ -121,6 +153,7 @@ def agregar_producto(request):
         descripcion=descripcion,
         categoria=categoria,
         precio=precio,
+        cantidad=cantidad,
     )
 
     # Check duplicates proactively to provide specific messages
@@ -142,9 +175,16 @@ def agregar_producto(request):
         with transaction.atomic():
             producto.full_clean()
             producto.save()
-            # Crear stock inicial (0) y registrar movimiento de ALTA
-            Stock.objects.create(producto=producto, cantidad=0)
-            MovimientoInventario.objects.create(producto=producto, usuario=None, cantidad=0, tipo='ALTA')
+            # Crear stock inicial con la cantidad proporcionada y registrar movimiento de ALTA
+            Stock.objects.create(producto=producto, cantidad=cantidad)
+            MovimientoInventario.objects.create(
+                producto=producto,
+                usuario=None,
+                cantidad=cantidad,
+                tipo='ALTA',
+                producto_nombre=producto.nombre,
+                producto_codigo=producto.codigo_producto,
+            )
     except ValidationError as e:
         # e.message_dict es un dict de listas
         errores = []
@@ -206,3 +246,231 @@ def next_codigo(request, letter):
     siguiente_str = str(siguiente).zfill(3)
     next_code = f"{letter}{siguiente_str}"
     return JsonResponse({'next_code': next_code, 'next_seq': siguiente_str})
+
+
+def obtener_producto_json(request, producto_id):
+    """Devuelve los datos del producto en JSON para rellenar el modal de edición."""
+    try:
+        producto = Producto.objects.select_related('categoria').get(id_producto=producto_id)
+    except Producto.DoesNotExist:
+        return JsonResponse({'error': 'Producto no encontrado'}, status=404)
+
+    data = {
+        'id': producto.id_producto,
+        'codigo_producto': producto.codigo_producto,
+        'nombre': producto.nombre,
+        'descripcion': producto.descripcion,
+        'categoria': producto.categoria.id_categoria if producto.categoria else None,
+        'precio': producto.precio,
+        'cantidad': producto.cantidad,
+    }
+    return JsonResponse(data)
+
+
+def eliminar_producto(request, producto_id):
+    """Elimina un producto identificado por `producto_id`.
+
+    Acepta sólo POST. Redirige a la lista con un mensaje.
+    """
+    if request.method != 'POST':
+        return redirect('producto-list')
+
+    producto = get_object_or_404(Producto, id_producto=producto_id)
+    nombre = producto.nombre
+
+    # Antes de eliminar, registrar en MovimientoInventario un movimiento de tipo BAJA
+    # Usar la cantidad desde Stock si existe, si no usar el campo cantidad del producto
+    try:
+        stock = Stock.objects.get(producto=producto)
+        baja_cantidad = int(stock.cantidad or 0)
+    except Stock.DoesNotExist:
+        baja_cantidad = int(producto.cantidad or 0)
+
+    try:
+        with transaction.atomic():
+            # Registrar movimiento de BAJA (guardar también nombre y código para auditoría)
+            MovimientoInventario.objects.create(
+                producto=producto,
+                usuario=None,
+                cantidad=baja_cantidad,
+                tipo='BAJA',
+                producto_nombre=producto.nombre,
+                producto_codigo=producto.codigo_producto,
+            )
+            # Borrar el producto (esto también eliminará Stock y relaciones por cascade)
+            producto.delete()
+    except Exception:
+        messages.error(request, f'No se pudo eliminar el producto "{nombre}".')
+        return redirect('producto-list')
+
+    messages.success(request, f'Producto "{nombre}" eliminado correctamente y movimiento BAJA registrado.')
+    return redirect('producto-list')
+
+
+def actualizar_producto(request, producto_id):
+    """Actualiza un producto a partir de POST (desde modal de edición).
+
+    Si la `cantidad` cambia, registra un MovimientoInventario de tipo `MODI`.
+    """
+    if request.method != 'POST':
+        return redirect('producto-list')
+
+    # Soportar form-data y JSON similar a agregar_producto
+    wants_json = False
+    try:
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest' or 'application/json' in request.headers.get('accept', ''):
+            wants_json = True
+    except Exception:
+        wants_json = False
+
+    if wants_json and request.content_type == 'application/json':
+        import json
+        try:
+            payload = json.loads(request.body.decode('utf-8') or '{}')
+        except Exception:
+            payload = {}
+        nombre = str(payload.get('nombre', '') or '').strip()
+        descripcion = str(payload.get('descripcion', '') or '').strip()
+        categoria_id = payload.get('categoria')
+        precio_raw = payload.get('precio')
+        cantidad_raw = payload.get('cantidad')
+    else:
+        nombre = request.POST.get('nombre', '').strip()
+        descripcion = request.POST.get('descripcion', '').strip()
+        categoria_id = request.POST.get('categoria')
+        precio_raw = request.POST.get('precio')
+        cantidad_raw = request.POST.get('cantidad')
+
+    producto = get_object_or_404(Producto, id_producto=producto_id)
+
+    # Validaciones básicas
+    if not (nombre and descripcion and categoria_id is not None and precio_raw is not None and cantidad_raw is not None):
+        msg = 'Todos los campos son obligatorios.'
+        if wants_json:
+            return JsonResponse({'error': msg}, status=400)
+        messages.error(request, msg)
+        return redirect('producto-list')
+
+    try:
+        categoria = Categoria.objects.get(id_categoria=categoria_id)
+    except Categoria.DoesNotExist:
+        msg = 'Categoría no encontrada.'
+        if wants_json:
+            return JsonResponse({'error': msg}, status=400)
+        messages.error(request, msg)
+        return redirect('producto-list')
+
+    try:
+        precio = int(precio_raw)
+        if precio < 0:
+            raise ValueError
+    except (ValueError, TypeError):
+        msg = 'El precio debe ser un número entero mayor o igual a 0.'
+        if wants_json:
+            return JsonResponse({'error': msg}, status=400)
+        messages.error(request, msg)
+        return redirect('producto-list')
+
+    try:
+        cantidad = int(cantidad_raw)
+        if cantidad < 0:
+            raise ValueError
+    except (ValueError, TypeError):
+        msg = 'La cantidad debe ser un número entero mayor o igual a 0.'
+        if wants_json:
+            return JsonResponse({'error': msg}, status=400)
+        messages.error(request, msg)
+        return redirect('producto-list')
+
+    # Detección de duplicados: nombre (otro producto con mismo nombre)
+    if Producto.objects.filter(nombre__iexact=nombre).exclude(id_producto=producto.id_producto).exists():
+        msg = f'Ya existe otro producto con el nombre "{nombre}".'
+        if wants_json:
+            return JsonResponse({'error': msg}, status=409)
+        messages.error(request, msg)
+        return redirect('producto-list')
+
+    # Guardar cambios y gestionar stock/movimientos en transacción
+    try:
+        with transaction.atomic():
+            # Registrar valores previos
+            try:
+                stock = Stock.objects.get(producto=producto)
+                prev_stock = int(stock.cantidad or 0)
+            except Stock.DoesNotExist:
+                stock = None
+                prev_stock = None
+
+            # Actualizar campos del producto
+            producto.nombre = nombre
+            producto.descripcion = descripcion
+            producto.categoria = categoria
+            producto.precio = precio
+            producto.cantidad = cantidad
+
+            producto.full_clean()
+            producto.save()
+
+            # Actualizar / crear stock
+            if stock is None:
+                # crear stock nuevo
+                stock = Stock.objects.create(producto=producto, cantidad=cantidad)
+                # Si cantidad > 0, registrar movimiento MODI (ajuste)
+                if cantidad and cantidad != 0:
+                    MovimientoInventario.objects.create(
+                        producto=producto,
+                        usuario=(request.user if hasattr(request, 'user') and request.user.is_authenticated else None),
+                        cantidad=abs(cantidad),
+                        tipo='MODI',
+                        producto_nombre=producto.nombre,
+                        producto_codigo=producto.codigo_producto,
+                    )
+            else:
+                # calcular diferencia
+                diff = cantidad - prev_stock
+                if diff != 0:
+                    # Bloquear si el nuevo stock sería negativo (no permitir dejar stock < 0)
+                    if cantidad < 0:
+                        msg = 'No se puede establecer una cantidad negativa en stock.'
+                        if wants_json:
+                            return JsonResponse({'error': msg}, status=400)
+                        messages.error(request, msg)
+                        return redirect('producto-list')
+
+                    # crear movimiento MODI con la cantidad absoluta del cambio
+                    MovimientoInventario.objects.create(
+                        producto=producto,
+                        usuario=(request.user if hasattr(request, 'user') and request.user.is_authenticated else None),
+                        cantidad=abs(diff),
+                        tipo='MODI',
+                        producto_nombre=producto.nombre,
+                        producto_codigo=producto.codigo_producto,
+                    )
+                # actualizar stock al nuevo valor
+                stock.cantidad = cantidad
+                stock.save()
+
+    except ValidationError as e:
+        errores = []
+        if hasattr(e, 'message_dict'):
+            for v in e.message_dict.values():
+                errores.extend(v)
+        else:
+            errores = [str(e)]
+        msg = 'Errores: ' + '; '.join(errores)
+        if wants_json:
+            return JsonResponse({'error': msg, 'details': errores}, status=400)
+        messages.error(request, msg)
+        return redirect('producto-list')
+    except IntegrityError:
+        msg = 'Error de integridad al actualizar el producto.'
+        if wants_json:
+            return JsonResponse({'error': msg}, status=500)
+        messages.error(request, msg)
+        return redirect('producto-list')
+
+    success_msg = f'Producto "{producto.nombre}" actualizado correctamente.'
+    if wants_json:
+        return JsonResponse({'id': producto.id_producto, 'nombre': producto.nombre}, status=200)
+    messages.success(request, success_msg)
+    return redirect('producto-list')
