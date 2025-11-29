@@ -13,8 +13,9 @@
                     if (onLoginPage || isLoginRequest) {
                         return; // allow local error handling to proceed
                     }
-                    // For other endpoints, redirect to index so the UI reloads to login
-                    window.location.href = '/';
+                    // For other endpoints, redirect to index and indicate session expired
+                    // so the login page can show a friendly message.
+                    window.location.href = '/?expired=1';
                 }
             } catch (e) { /* noop */ }
         });
@@ -34,7 +35,8 @@
                         if (onLoginPage || isLoginRequest) {
                             return Promise.reject(new Error('Unauthorized'));
                         }
-                        window.location.href = '/';
+                        // Redirect to login with a flag so the UI can display an "session expired" message
+                        window.location.href = '/?expired=1';
                         return Promise.reject(new Error('Unauthorized'));
                     }
                 } catch (e) { /* noop */ }

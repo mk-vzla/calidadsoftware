@@ -61,7 +61,32 @@
         <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
         <script src="{% static 'js/login_validations.js' %}"></script>
         <script src="{% static 'js/session_expiry.js' %}"></script>
-    </footer>
+        <script>
+            // Mostrar mensaje en la página de login si se llega con ?expired=1
+            document.addEventListener('DOMContentLoaded', function () {
+                try {
+                    var params = new URLSearchParams(window.location.search);
+                    if (params.get('expired') === '1') {
+                        // Use the page helper if present, else fallback to alert
+                        if (typeof showClientMessage === 'function') {
+                            showClientMessage('Sesión expirada por inactividad. Por favor, inicie sesión de nuevo.', 'warning');
+                        } else {
+                            var container = document.getElementById('client-messages');
+                            if (container) {
+                                container.innerHTML = '<div class="alert alert-warning">Sesión expirada por inactividad. Por favor, inicie sesión de nuevo.</div>';
+                            } else {
+                                alert('Sesión expirada por inactividad. Por favor, inicie sesión de nuevo.');
+                            }
+                        }
+                        // Remove the query param from the URL to avoid repeated notices
+                        if (window.history && window.history.replaceState) {
+                            var cleanUrl = window.location.pathname;
+                            window.history.replaceState({}, document.title, cleanUrl);
+                        }
+                    }
+                } catch (e) { /* noop */ }
+            });
+        </script>
 </body>
 
 </html>

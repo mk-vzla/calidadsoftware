@@ -157,7 +157,19 @@ def agregar_producto(request):
 
     # Validaciones básicas (incluye cantidad)
     # Comprobar campos obligatorios por separado para mensajes más precisos
-    if not (codigo and nombre and descripcion and precio_raw is not None and cantidad_raw is not None):
+    def _is_missing(v):
+        return v is None or (isinstance(v, str) and v.strip() == '')
+
+    # Verificar campos de texto obligatorios
+    if _is_missing(codigo) or _is_missing(nombre) or _is_missing(descripcion):
+        msg = 'Todos los campos son obligatorios.'
+        if wants_json:
+            return JsonResponse({'error': msg}, status=400)
+        messages.error(request, msg)
+        return redirect('producto-list')
+
+    # Verificar que los campos numéricos estén presentes (pueden venir como 0)
+    if precio_raw is None or cantidad_raw is None:
         msg = 'Todos los campos son obligatorios.'
         if wants_json:
             return JsonResponse({'error': msg}, status=400)
@@ -183,11 +195,15 @@ def agregar_producto(request):
 
     try:
         # precio_raw puede venir como string o número
+        # Rechazar explícitamente si viene como float (p. ej. 12.50) para forzar entero
+        if isinstance(precio_raw, float):
+            raise ValueError
         precio = int(precio_raw)
         if precio < 0:
             raise ValueError
     except (ValueError, TypeError):
-        msg = 'El precio debe ser un número entero mayor o igual a 0.'
+        # Si llegó un valor pero no pudo convertirse, es un error de formato
+        msg = 'Formato Inválido operación rechazada'
         if wants_json:
             return JsonResponse({'error': msg}, status=400)
         messages.error(request, msg)
@@ -204,7 +220,8 @@ def agregar_producto(request):
             messages.error(request, msg)
             return redirect('producto-list')
     except (ValueError, TypeError):
-        msg = 'La cantidad debe ser un número entero mayor o igual a 0.'
+        # Si llegó un valor pero no pudo convertirse, es un error de formato
+        msg = 'Formato Inválido operación rechazada'
         if wants_json:
             return JsonResponse({'error': msg}, status=400)
         messages.error(request, msg)
@@ -254,7 +271,9 @@ def agregar_producto(request):
                 usuario_id=(mov_usuario.id_usuario if mov_usuario else None),
                 cantidad=cantidad,
                 tipo='ALTA',
-                resumen_operacion=json.dumps({'antes': None, 'despues': nuevo_estado}, ensure_ascii=False),
+                resumen_operacion=(f"Alta: Nombre {producto.nombre}, Código {producto.codigo_producto}, "
+                                   f"Categoría {categoria.nombre if categoria else '(ninguna)'}, "
+                                   f"Precio {producto.precio}, Cantidad {cantidad}"),
                 producto_nombre=producto.nombre,
                 producto_codigo=producto.codigo_producto,
             )
@@ -395,16 +414,9 @@ def eliminar_producto(request, producto_id):
                 usuario_id=(mov_usuario.id_usuario if mov_usuario else None),
                 cantidad=baja_cantidad,
                 tipo='BAJA',
-                resumen_operacion=json.dumps({
-                    'antes': {
-                        'nombre': producto.nombre,
-                        'codigo': producto.codigo_producto,
-                        'categoria': {'id': producto.categoria.id_categoria, 'nombre': producto.categoria.nombre} if producto.categoria else None,
-                        'precio': producto.precio,
-                        'cantidad': baja_cantidad,
-                    },
-                    'despues': None
-                }, ensure_ascii=False),
+                resumen_operacion=(f"Baja: Nombre {producto.nombre}, Código {producto.codigo_producto}, "
+                                   f"Categoría {producto.categoria.nombre if producto.categoria else '(ninguna)'}, "
+                                   f"Precio {producto.precio}, Cantidad {baja_cantidad}"),
                 producto_nombre=producto.nombre,
                 producto_codigo=producto.codigo_producto,
             )
@@ -455,7 +467,19 @@ def actualizar_producto(request, producto_id):
     producto = get_object_or_404(Producto, id_producto=producto_id)
 
     # Validaciones básicas
-    if not (nombre and descripcion and precio_raw is not None and cantidad_raw is not None):
+    def _is_missing(v):
+        return v is None or (isinstance(v, str) and v.strip() == '')
+
+    # Verificar campos de texto obligatorios
+    if _is_missing(nombre) or _is_missing(descripcion):
+        msg = 'Todos los campos son obligatorios.'
+        if wants_json:
+            return JsonResponse({'error': msg}, status=400)
+        messages.error(request, msg)
+        return redirect('producto-list')
+
+    # Verificar que los campos numéricos estén presentes (pueden venir como 0)
+    if precio_raw is None or cantidad_raw is None:
         msg = 'Todos los campos son obligatorios.'
         if wants_json:
             return JsonResponse({'error': msg}, status=400)
@@ -480,11 +504,14 @@ def actualizar_producto(request, producto_id):
         return redirect('producto-list')
 
     try:
+        # Rechazar float explícitamente cuando la petición es JSON (mantener regla consistente)
+        if isinstance(precio_raw, float):
+            raise ValueError
         precio = int(precio_raw)
         if precio < 0:
             raise ValueError
     except (ValueError, TypeError):
-        msg = 'El precio debe ser un número entero mayor o igual a 0.'
+        msg = 'Formato Inválido operación rechazada'
         if wants_json:
             return JsonResponse({'error': msg}, status=400)
         messages.error(request, msg)
@@ -495,7 +522,7 @@ def actualizar_producto(request, producto_id):
         if cantidad < 0:
             raise ValueError
     except (ValueError, TypeError):
-        msg = 'La cantidad debe ser un número entero mayor o igual a 0.'
+        msg = 'Formato Inválido operación rechazada'
         if wants_json:
             return JsonResponse({'error': msg}, status=400)
         messages.error(request, msg)
