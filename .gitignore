@@ -9,6 +9,7 @@ unitarias-preview.txt
 *a_usuario.py
 init_sql.sql
 extras.txt
+*xtras.txt
 
 # Virtual env
 .venv/
