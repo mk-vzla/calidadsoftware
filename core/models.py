@@ -81,7 +81,7 @@ class Producto(models.Model):
     descripcion = models.TextField()
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
     precio = models.IntegerField()
-
+    cantidad = models.IntegerField(default=0)
     fecha_creacion = models.DateTimeField(auto_now_add=True)
     fecha_modificacion = models.DateTimeField(auto_now=True)
 
