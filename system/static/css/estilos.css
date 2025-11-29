@@ -1,0 +1,95 @@
+/* Estilos para el login (limpio) */
+:root{
+	--bg-overlay: rgba(0,0,0,0.45);
+	--card-bg: #071226; /* azul marino oscuro */
+	--card-border: rgba(255,255,255,0.04);
+	--accent: #60a5fa; /* icon / accent blue */
+	--muted: rgba(255,255,255,0.75);
+	--text-light: #ffffff;
+}
+
+html,body{height:100%;}
+body{
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	margin:0;
+	background-image: url('https://trello-backgrounds.s3.amazonaws.com/SharedBackground/2560x1707/65eaf65bdb6c3d81abb73a0689c5d87a/photo-1551882547-ff40c63fe5fa.webp');
+	background-size:cover;
+	background-position:center center;
+	background-repeat:no-repeat;
+	min-height:100vh;
+	color:#ffffff;
+}
+
+/* overlay para mejorar contraste */
+body::before{
+	content:"";
+	position:fixed;
+	inset:0;
+	background:var(--bg-overlay);
+	z-index:0;
+}
+
+.view{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px}
+.login-container{width:100%;max-width:420px}
+.login-card{
+	background: var(--card-bg); /* fondo azul marino */
+	color: var(--text-light);
+	border: 1px solid var(--card-border);
+	padding: 36px 32px;
+	border-radius: 14px;
+	box-shadow: 0 12px 36px rgba(2,6,23,0.35);
+}
+
+/* Fullscreen product panel: ocupa casi toda la pantalla con 100px de separación */
+.fullscreen-container{padding:100px;box-sizing:border-box;min-height:100vh}
+
+/* Clases nuevas y dedicadas para la página de productos
+	No reutilizan las clases de login. */
+.product-container{width:100%;height:100%}
+.product-card{max-width:100%;width:100%;height:calc(100vh - 200px);overflow:auto;padding:28px;border-radius:14px;background:var(--card-bg);border:1px solid var(--card-border);box-shadow:0 12px 36px rgba(2,6,23,0.35);}
+.product-card .site-title h1{margin-top:0}
+.product-card .table-responsive{margin-top:8px}
+.site-title h1{
+	font-size:26px;
+	margin:8px 0 14px 0;
+	color: var(--text-light);
+	font-weight:700;
+}
+.site-icon{display:block;margin:0 auto;color:var(--accent);font-size:44px}
+
+.login-form .form-group{margin-bottom:14px}
+.login-form label{display:block;color:var(--muted);font-size:13px;margin-bottom:6px}
+.login-form .form-control{
+	background: rgba(255,255,255,0.03); /* inputs oscuros sobre tarjeta */
+	border: 1px solid rgba(255,255,255,0.06);
+	color: var(--text-light);
+	padding: 12px 14px;
+	border-radius:10px;
+}
+.login-form .form-control::placeholder{color: rgba(255,255,255,0.6)}
+
+.btn-primary{
+	background: var(--accent);
+	border-color: transparent;
+	color: #0b1220;
+	font-weight: 600;
+}
+.btn-primary:hover{opacity:0.95}
+.btn-secondary{
+	background: transparent;
+	color: var(--text-light);
+	border: 1px solid rgba(255,255,255,0.08);
+}
+
+.d-flex.gap-2{display:flex;gap:8px}
+
+/* Responsive */
+@media (max-width:480px){
+	.login-container{padding:0 12px}
+	.login-card{padding:18px}
+	.fullscreen-container{padding:24px}
+	.product-panel{height:calc(100vh - 48px)}
+}
+
+/* fin estilos */
+

@@ -1,0 +1,10 @@
+$env:MYSQL_SYSTEM_ADMIN_PW = 'AVNS_4MlStihFzaaP5E79Rzg'     //variable de entorno
+
+
+BD management:
+Eliminar todas las migraciones anteriores:     rm core/migrations/000*.py
+Reiniciar todo:                                python manage.py migrate --fake core zero
+continuar eliminación mysqlworkbench:                         DELETE FROM django_migrations WHERE app = 'core'; 
+Preparar migrations core:                      python manage.py makemigrations core
+Migrar core:                                   python manage.py migrate core
+python manage.py makemigrations       //       python manage.py migrate    //  
