@@ -1,6 +1,29 @@
-2025-11-29 10:45:14 | PUtSeleniumTests.test_p_ut_01_alta_basica | OK | screenshot: C:\Users\micha\Documentos\DUOCUC\8voBimestre\Calidad de Software\system\calidadsoftware\core\tests\P-UT-01.png
-2025-11-29 10:45:39 | PUtSeleniumTests.test_p_ut_02_codigo_duplicado | OK | screenshot: C:\Users\micha\Documentos\DUOCUC\8voBimestre\Calidad de Software\system\calidadsoftware\core\tests\P-UT-02.png
-2025-11-29 10:46:06 | PUtSeleniumTests.test_p_ut_03_codigo_formato_invalido | OK | screenshot: C:\Users\micha\Documentos\DUOCUC\8voBimestre\Calidad de Software\system\calidadsoftware\core\tests\P-UT-03.png
-2025-11-29 10:57:09 | PUtSeleniumTests.test_p_ut_01_alta_basica | OK | screenshot: C:\Users\micha\Documentos\DUOCUC\8voBimestre\Calidad de Software\system\calidadsoftware\core\tests\P-UT-01.png
-2025-11-29 10:57:35 | PUtSeleniumTests.test_p_ut_02_codigo_duplicado | OK | screenshot: C:\Users\micha\Documentos\DUOCUC\8voBimestre\Calidad de Software\system\calidadsoftware\core\tests\P-UT-02.png
-2025-11-29 10:58:01 | PUtSeleniumTests.test_p_ut_03_codigo_formato_invalido | OK | screenshot: C:\Users\micha\Documentos\DUOCUC\8voBimestre\Calidad de Software\system\calidadsoftware\core\tests\P-UT-03.png
+Inicio
+2025-11-30 02:25:17 | P-UT-01 | Resultado: OK | 4.752s
+2025-11-30 02:25:22 | P-UT-02 | Resultado: OK | 3.973s
+2025-11-30 02:25:28 | P-UT-03 | Resultado: OK | 3.953s
+Fin. Duración total: 12.679s
+Inicio
+2025-11-30 02:27:18 | P-UT-01 | Resultado: OK | 5.073s
+2025-11-30 02:27:22 | P-UT-02 | Resultado: OK | 4.015s
+2025-11-30 02:27:29 | P-UT-03 | Resultado: OK | 4.598s
+Fin. Duración total: 13.686s
+Inicio
+2025-11-30 02:27:44 | S-UT-01 | Resultado: OK | 3.989s
+2025-11-30 02:27:48 | S-UT-02 | Resultado: OK | 3.480s
+2025-11-30 02:27:53 | S-UT-03 | Resultado: OK | 4.216s
+Fin. Duración total: 11.685s
+Inicio
+2025-11-30 02:28:10 | V-UT-01 | Resultado: OK | 5.230s
+2025-11-30 02:28:18 | V-UT-02 | Resultado: OK | 7.519s
+2025-11-30 02:28:24 | V-UT-03 | Resultado: OK | 3.754s
+Fin. Duración total: 16.503s
+Inicio
+2025-11-30 02:28:38 | A-UT-01 | Resultado: OK | 3.478s
+2025-11-30 02:28:40 | A-UT-02 | Resultado: OK | 1.909s
+2025-11-30 02:28:44 | A-UT-03 | Resultado: OK | 2.397s
+Fin. Duración total: 7.784s
+Inicio
+2025-11-30 02:28:52 | H-UT-01 | Resultado: OK | 0.000s
+2025-11-30 02:28:53 | H-UT-02 | Resultado: OK | 0.000s
+Fin. Duración total: 0.000s

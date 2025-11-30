@@ -3,7 +3,7 @@ import time
 import os
 from datetime import datetime
 
-from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from .test_logger import LoggedLiveServerTestCase, append_test_result
 from django.contrib.sessions.backends.db import SessionStore
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -16,7 +16,7 @@ from selenium.webdriver.chrome.options import Options
 from core.models import Usuario, Categoria, Producto, Stock
 
 
-class PUtSeleniumTests(StaticLiveServerTestCase):
+class PUtSeleniumTests(LoggedLiveServerTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -106,44 +106,22 @@ class PUtSeleniumTests(StaticLiveServerTestCase):
             pass
 
     def tearDown(self):
-        # Log outcome to file: core/tests/test_results.txt
+        # Only report standardized result (append_test_result) to avoid
+        # writing per-test lines that include screenshot paths.
         try:
             outcome = getattr(self, '_outcome', None)
             status = 'OK'
-            details = ''
             if outcome:
-                # outcome.errors is a list of (testcase, formatted_exc)
                 for test, exc in getattr(outcome, 'errors', []) or []:
                     if exc:
                         status = 'FAIL'
-                        details = str(exc)
                         break
 
-            # map method name to screenshot filename if exists
-            method = getattr(self, '_testMethodName', 'unknown')
-            if 'p_ut_01' in method:
-                png = 'P-UT-01.png'
-            elif 'p_ut_02' in method:
-                png = 'P-UT-02.png'
-            elif 'p_ut_03' in method:
-                png = 'P-UT-03.png'
-            else:
-                png = f"{method}.png"
-
-            tests_dir = os.path.dirname(__file__)
-            png_path = os.path.join(tests_dir, png)
-            png_info = png_path if os.path.exists(png_path) else ''
-
-            ts = datetime.now().isoformat(sep=' ', timespec='seconds')
-            entry = f"{ts} | {self.__class__.__name__}.{method} | {status}"
-            if png_info:
-                entry += f" | screenshot: {png_info}"
-            if details:
-                entry += f" | {details[:300].replace('\n', ' ')}"
-
-            results_file = os.path.join(tests_dir, 'test_results.txt')
-            with open(results_file, 'a', encoding='utf-8') as f:
-                f.write(entry + '\n')
+            try:
+                duration = max(0.0, time.time() - getattr(self, '_start_time', time.time()))
+                append_test_result(self.id(), status, duration)
+            except Exception:
+                pass
         except Exception:
             pass
 

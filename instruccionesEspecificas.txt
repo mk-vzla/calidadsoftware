@@ -1,0 +1,15 @@
+Deberás realizar lo siguiente:
+1.	Leer y comprender el caso transversal proporcionado, que describe los requerimientos del sistema de inventario y los problemas identificados relacionados con las pruebas y la calidad del software.
+2.	Análisis de no conformidades:
+a.	Identificar las no conformidades presentes en el sistema de inventario de acuerdo a los requisitos establecidos.
+b.	Utilizar el modelo CMMI como marco de referencia para clasificar y categorizar las no conformidades.
+c.	Realizar un análisis detallado de cada no conformidad identificada, documentando sus causas y efectos. 
+3.	Aplica el plan de pruebas.
+4.	Propuesta de soluciones:
+a.	Generar propuestas de solución para cada una de las no conformidades identificadas.
+b.	Utilizar las buenas prácticas y directrices del modelo CMMI para guiar las propuestas de soluciones.
+c.	Considerar aspectos de usabilidad, seguridad, rendimiento y calidad del software al proponer las soluciones.
+5.	Documentación del proceso:
+a.	Elaborar un informe detallado que incluya las no conformidades identificadas, las soluciones propuestas y su implementación.
+b.	Utilizar el formato adecuado para el informe, incluyendo secciones como introducción, metodología, resultados, conclusiones y recomendaciones.
+c.	Presentar el informe final de manera clara y organizada, utilizando un lenguaje técnico apropiado.

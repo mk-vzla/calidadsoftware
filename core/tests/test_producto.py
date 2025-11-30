@@ -1,9 +1,10 @@
-from django.test import TestCase, Client
+from django.test import Client
 from django.urls import reverse
+from .test_logger import LoggedTestCase
 from core.models import Producto, Categoria, Stock, MovimientoInventario, Usuario
 
 
-class ProductoTests(TestCase):
+class ProductoTests(LoggedTestCase):
     def setUp(self):
         # crear categoría y usuario de prueba
         self.cat = Categoria.objects.create(nombre='Herramientas')

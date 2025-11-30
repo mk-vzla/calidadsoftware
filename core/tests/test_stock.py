@@ -1,7 +1,8 @@
 import json
-from django.test import TestCase, Client
+from django.test import Client
 from django.urls import reverse
 from django.contrib.sessions.backends.db import SessionStore
+from .test_logger import LoggedTestCase
 
 from core.models import Usuario, Categoria, Producto, Stock, MovimientoInventario
 
@@ -13,7 +14,7 @@ def _create_session_for_client(client, user):
     client.cookies['sessionid'] = s.session_key
 
 
-class StockUnitTests(TestCase):
+class StockUnitTests(LoggedTestCase):
     def setUp(self):
         self.client = Client()
 

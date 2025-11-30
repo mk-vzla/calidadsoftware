@@ -1,10 +1,11 @@
 import json
 import os
 
-from django.test import TestCase, Client
+from django.test import Client
 from django.contrib.sessions.backends.db import SessionStore
 from django.urls import reverse
 
+from .test_logger import LoggedTestCase
 from core.models import Usuario, Categoria
 
 
@@ -15,7 +16,7 @@ def _create_session_for_client(client, user):
     client.cookies['sessionid'] = s.session_key
 
 
-class ValidationsUnitTests(TestCase):
+class ValidationsUnitTests(LoggedTestCase):
     def setUp(self):
         self.client = Client()
 

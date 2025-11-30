@@ -3,7 +3,7 @@ import time
 import os
 import json
 
-from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from .test_logger import LoggedLiveServerTestCase
 from django.contrib.sessions.backends.db import SessionStore
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -16,7 +16,7 @@ from selenium.webdriver.chrome.options import Options
 from core.models import Usuario, Categoria, Producto, Stock
 
 
-class StockSeleniumTests(StaticLiveServerTestCase):
+class StockSeleniumTests(LoggedLiveServerTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()

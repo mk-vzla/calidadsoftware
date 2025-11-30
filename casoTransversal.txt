@@ -1,0 +1,19 @@
+Caso transversal 
+La empresa de desarrollo “System” ha creado un sistema para el inventario de productos el cual ya se encuentra en un avanzado proceso de desarrollo. El equipo, se ha dado cuenta que el sistema no está cumpliendo con algunos requerimientos debido a que no se ha realizado un proceso de pruebas de manera correcta. Es por ello que lo ha contratado a usted, para asesorar a la empresa en la creación de una gestión para el proceso de pruebas, basado en la gestión de inventario. 
+1.	En la gestión de inventario, el sistema debe ser capaz de: 
+a.	Agregar un nuevo producto
+b.	Modificar un producto ya ingresado
+c.	Eliminar un producto existente
+d.	Buscar un producto
+e.	Agregar stock de un producto
+f.	Eliminar stock de un producto
+g.	Generar un historial de inventario de un producto
+h.	Los productos deben pertenecer a una categoría de manera obligatoria
+i.	Los productos deben tener un código y un nombre distinto
+j.	Los códigos deben tener una longitud obligatoria de 3 dígitos comenzando con la inicial del producto y un número correlativo.
+k.	Al agregar un nuevo producto el precio solo debe aceptar números enteros. 
+2.	Cualquier persona que pueda trabajar con el sistema debe estar previamente registrado e ingresar con el usuario y contraseña asignado. 
+3.	Se debe hacer revisión de la ortografía y diseño del sistema. Cualquier problema de esta índole también deberá ser informado como resultado de los casos de prueba.
+4.	Comprobar criterios de seguridad del sistema. Para ello debe recomendar mejoras al sistema si encuentra problemas de seguridad como por ejemplo TimeOut de los usuarios.
+5.	La base de datos igual debe ser considerada en el proceso de pruebas, indicando problemas de cualquier tipo. (Seguridad, tipos de datos, tiempo de respuesta, etc.)
+6.	La empresa cuenta con 20 personas que pueden trabajar de manera simultánea con el sistema, es por ello que se les solicita la ejecución de pruebas que permitan obtener el rendimiento de la aplicación.

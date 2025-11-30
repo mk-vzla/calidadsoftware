@@ -2,7 +2,7 @@ import os
 import time
 from urllib.parse import urlparse
 
-from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from .test_logger import LoggedLiveServerTestCase
 from django.contrib.sessions.backends.db import SessionStore
 from django.contrib.sessions.models import Session
 from selenium import webdriver
@@ -16,7 +16,7 @@ from selenium.webdriver.chrome.options import Options
 from core.models import Usuario
 
 
-class SesionesSeleniumTests(StaticLiveServerTestCase):
+class SesionesSeleniumTests(LoggedLiveServerTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()

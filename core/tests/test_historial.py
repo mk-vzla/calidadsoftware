@@ -1,10 +1,10 @@
-from django.test import TestCase
 from django.urls import reverse
+from .test_logger import LoggedTestCase
 
 from core.models import Usuario, Categoria, Producto, MovimientoInventario, Stock
 
 
-class HistorialTests(TestCase):
+class HistorialTests(LoggedTestCase):
     def setUp(self):
         # usuario que realizará las acciones
         self.user = Usuario.objects.create(nombres='Hist', usuario='hist1', email='hist1@example.test')
