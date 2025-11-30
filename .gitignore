@@ -10,6 +10,8 @@ unitarias-preview.txt
 init_sql.sql
 extras.txt
 *xtras.txt
+informe_calidad.md
+informe_calidad.pdf
 
 # Virtual env
 .venv/

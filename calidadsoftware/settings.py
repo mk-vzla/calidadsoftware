@@ -62,6 +62,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # Métricas de latencia y recursos por request
+    'core.middleware.RequestMetricsMiddleware',
 ]
 
 ROOT_URLCONF = 'calidadsoftware.urls'
@@ -157,3 +159,30 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SESSION_COOKIE_AGE = 15*60  # 10 segundos para pruebas de expiración
 # Al poner True, la cookie de sesión se renueva en cada petición activa (sliding expiration)
 SESSION_SAVE_EVERY_REQUEST = True
+
+# Logging para métricas de request
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'request': {
+            'format': '%(asctime)s | %(message)s',
+        },
+    },
+    'handlers': {
+        'request_file': {
+            'class': 'logging.FileHandler',
+            'level': 'INFO',
+            'formatter': 'request',
+            'filename': os.path.join(BASE_DIR, 'request_metrics.log'),
+            'encoding': 'utf-8',
+        },
+    },
+    'loggers': {
+        'request_metrics': {
+            'handlers': ['request_file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+}

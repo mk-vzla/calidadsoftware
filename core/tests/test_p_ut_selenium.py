@@ -3,7 +3,12 @@ import time
 import os
 from datetime import datetime
 
-from .test_logger import LoggedLiveServerTestCase, append_test_result
+from .test_logger import LoggedLiveServerTestCase, append_test_result, RESULTS_FILE
+try:
+    from core.middleware import pop_request_metrics
+except Exception:
+    def pop_request_metrics(_):
+        return []
 from django.contrib.sessions.backends.db import SessionStore
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -120,6 +125,18 @@ class PUtSeleniumTests(LoggedLiveServerTestCase):
             try:
                 duration = max(0.0, time.time() - getattr(self, '_start_time', time.time()))
                 append_test_result(self.id(), status, duration)
+                # métricas de requests asociadas al test
+                metrics = pop_request_metrics(self.id())
+                if metrics:
+                    try:
+                        with open(RESULTS_FILE, 'a', encoding='utf-8') as f:
+                            for m in metrics:
+                                f.write(
+                                    f"REQ | {m['method']} {m['path']} | {m['status']} | latency_ms={m['latency_ms']:.2f} | "
+                                    f"rss_diff={m['rss_diff']} | user_cpu_s={m['user_cpu_s']:.3f} | system_cpu_s={m['system_cpu_s']:.3f}\n"
+                                )
+                    except Exception:
+                        pass
             except Exception:
                 pass
         except Exception:

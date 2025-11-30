@@ -1,29 +1,380 @@
 Inicio
-2025-11-30 02:25:17 | P-UT-01 | Resultado: OK | 4.752s
-2025-11-30 02:25:22 | P-UT-02 | Resultado: OK | 3.973s
-2025-11-30 02:25:28 | P-UT-03 | Resultado: OK | 3.953s
-Fin. Duración total: 12.679s
+2025-11-30 03:30:42 | P-UT-01 | Resultado: OK | 4.813s
+REQ | GET / | 200 | latency_ms=8.83 | rss_diff=57344 | user_cpu_s=0.000 | system_cpu_s=0.016
+REQ | GET /core/producto/ | 200 | latency_ms=202.09 | rss_diff=28672 | user_cpu_s=0.031 | system_cpu_s=0.047
+REQ | GET /core/producto/next_code/E/ | 200 | latency_ms=143.03 | rss_diff=32768 | user_cpu_s=0.031 | system_cpu_s=0.000
+REQ | POST /core/producto/add/ | 302 | latency_ms=328.14 | rss_diff=28672 | user_cpu_s=0.078 | system_cpu_s=0.000
+REQ | GET /core/producto/ | 200 | latency_ms=183.29 | rss_diff=28672 | user_cpu_s=0.047 | system_cpu_s=0.000
+2025-11-30 03:30:47 | P-UT-02 | Resultado: OK | 3.447s
+REQ | GET / | 200 | latency_ms=154.23 | rss_diff=192512 | user_cpu_s=0.016 | system_cpu_s=0.016
+REQ | GET /core/producto/ | 200 | latency_ms=187.17 | rss_diff=8192 | user_cpu_s=0.031 | system_cpu_s=0.000
+REQ | GET /core/producto/next_code/E/ | 200 | latency_ms=154.62 | rss_diff=8192 | user_cpu_s=0.062 | system_cpu_s=0.031
+REQ | POST /core/producto/add/ | 302 | latency_ms=337.94 | rss_diff=0 | user_cpu_s=0.047 | system_cpu_s=0.016
+REQ | GET /core/producto/ | 200 | latency_ms=213.89 | rss_diff=32768 | user_cpu_s=0.016 | system_cpu_s=0.000
+2025-11-30 03:30:53 | P-UT-03 | Resultado: OK | 5.987s
+REQ | GET / | 200 | latency_ms=248.65 | rss_diff=172032 | user_cpu_s=0.031 | system_cpu_s=0.000
+REQ | GET /core/producto/ | 200 | latency_ms=356.13 | rss_diff=20480 | user_cpu_s=0.031 | system_cpu_s=0.000
+REQ | GET /core/producto/next_code/E/ | 200 | latency_ms=280.48 | rss_diff=315392 | user_cpu_s=0.047 | system_cpu_s=0.016
+REQ | POST /core/producto/add/ | 302 | latency_ms=543.67 | rss_diff=397312 | user_cpu_s=0.047 | system_cpu_s=0.000
+REQ | GET /core/producto/ | 200 | latency_ms=393.83 | rss_diff=45056 | user_cpu_s=0.047 | system_cpu_s=0.000
+Fin. Duración total: 14.247s
 Inicio
-2025-11-30 02:27:18 | P-UT-01 | Resultado: OK | 5.073s
-2025-11-30 02:27:22 | P-UT-02 | Resultado: OK | 4.015s
-2025-11-30 02:27:29 | P-UT-03 | Resultado: OK | 4.598s
-Fin. Duración total: 13.686s
+2025-11-30 03:31:09 | S-UT-01 | Resultado: OK | 4.313s
+REQ | GET / | 200 | latency_ms=8.98 | rss_diff=53248 | user_cpu_s=0.000 | system_cpu_s=0.016
+REQ | GET /core/producto/ | 200 | latency_ms=267.00 | rss_diff=65536 | user_cpu_s=0.031 | system_cpu_s=0.016
+REQ | GET /core/producto/json/1/ | 200 | latency_ms=176.16 | rss_diff=40960 | user_cpu_s=0.016 | system_cpu_s=0.016
+REQ | POST /core/producto/update/1/ | 302 | latency_ms=353.76 | rss_diff=8192 | user_cpu_s=0.016 | system_cpu_s=0.016
+REQ | GET /core/producto/ | 200 | latency_ms=173.35 | rss_diff=36864 | user_cpu_s=0.047 | system_cpu_s=0.000
+2025-11-30 03:31:13 | S-UT-02 | Resultado: OK | 3.429s
+REQ | GET / | 200 | latency_ms=146.16 | rss_diff=73728 | user_cpu_s=0.031 | system_cpu_s=0.000
+REQ | GET /core/producto/ | 200 | latency_ms=198.66 | rss_diff=4096 | user_cpu_s=0.016 | system_cpu_s=0.016
+REQ | GET /core/producto/json/2/ | 200 | latency_ms=146.50 | rss_diff=24576 | user_cpu_s=0.016 | system_cpu_s=0.016
+REQ | POST /core/producto/update/2/ | 302 | latency_ms=347.56 | rss_diff=8192 | user_cpu_s=0.047 | system_cpu_s=0.000
+REQ | GET /core/producto/ | 200 | latency_ms=179.42 | rss_diff=40960 | user_cpu_s=0.031 | system_cpu_s=0.000
+2025-11-30 03:31:19 | S-UT-03 | Resultado: OK | 4.549s
+REQ | GET / | 200 | latency_ms=595.93 | rss_diff=8192 | user_cpu_s=0.031 | system_cpu_s=0.000
+REQ | GET /core/producto/ | 200 | latency_ms=326.53 | rss_diff=12288 | user_cpu_s=0.047 | system_cpu_s=0.000
+REQ | GET /core/producto/json/3/ | 200 | latency_ms=224.47 | rss_diff=12288 | user_cpu_s=0.031 | system_cpu_s=0.000
+Fin. Duración total: 12.291s
 Inicio
-2025-11-30 02:27:44 | S-UT-01 | Resultado: OK | 3.989s
-2025-11-30 02:27:48 | S-UT-02 | Resultado: OK | 3.480s
-2025-11-30 02:27:53 | S-UT-03 | Resultado: OK | 4.216s
-Fin. Duración total: 11.685s
+2025-11-30 03:31:35 | V-UT-01 | Resultado: OK | 5.242s
+REQ | GET / | 200 | latency_ms=10.99 | rss_diff=40960 | user_cpu_s=0.000 | system_cpu_s=0.000
+REQ | GET /core/producto/ | 200 | latency_ms=207.11 | rss_diff=24576 | user_cpu_s=0.047 | system_cpu_s=0.016
+REQ | GET /core/producto/next_code/P/ | 200 | latency_ms=143.57 | rss_diff=45056 | user_cpu_s=0.047 | system_cpu_s=0.000
+REQ | POST /core/producto/add/ | 302 | latency_ms=190.85 | rss_diff=32768 | user_cpu_s=0.016 | system_cpu_s=0.000
+REQ | GET /core/producto/ | 200 | latency_ms=184.83 | rss_diff=0 | user_cpu_s=0.031 | system_cpu_s=0.000
+2025-11-30 03:31:44 | V-UT-02 | Resultado: OK | 7.748s
+REQ | GET / | 200 | latency_ms=184.64 | rss_diff=8192 | user_cpu_s=0.047 | system_cpu_s=0.000
+REQ | GET /core/producto/ | 200 | latency_ms=167.44 | rss_diff=4096 | user_cpu_s=0.016 | system_cpu_s=0.016
+REQ | POST /core/producto/add/ | 302 | latency_ms=1610.70 | rss_diff=8192 | user_cpu_s=0.031 | system_cpu_s=0.016
+REQ | GET /core/producto/ | 200 | latency_ms=364.46 | rss_diff=12288 | user_cpu_s=0.031 | system_cpu_s=0.000
+2025-11-30 03:31:49 | V-UT-03 | Resultado: OK | 3.726s
+REQ | GET / | 200 | latency_ms=145.45 | rss_diff=8192 | user_cpu_s=0.031 | system_cpu_s=0.000
+REQ | GET /core/producto/ | 200 | latency_ms=179.87 | rss_diff=24576 | user_cpu_s=0.062 | system_cpu_s=0.000
+REQ | POST /core/producto/add/ | 302 | latency_ms=185.19 | rss_diff=401408 | user_cpu_s=0.078 | system_cpu_s=0.000
+REQ | GET /core/producto/next_code/P/ | 200 | latency_ms=173.38 | rss_diff=720896 | user_cpu_s=0.031 | system_cpu_s=0.016
+REQ | GET /core/producto/ | 200 | latency_ms=158.37 | rss_diff=331776 | user_cpu_s=0.047 | system_cpu_s=0.016
+Fin. Duración total: 16.716s
 Inicio
-2025-11-30 02:28:10 | V-UT-01 | Resultado: OK | 5.230s
-2025-11-30 02:28:18 | V-UT-02 | Resultado: OK | 7.519s
-2025-11-30 02:28:24 | V-UT-03 | Resultado: OK | 3.754s
-Fin. Duración total: 16.503s
+2025-11-30 03:32:03 | A-UT-01 | Resultado: OK | 3.353s
+REQ | GET / | 200 | latency_ms=8.96 | rss_diff=53248 | user_cpu_s=0.016 | system_cpu_s=0.000
+REQ | POST /usuarios/login/ | 200 | latency_ms=766.40 | rss_diff=16384 | user_cpu_s=0.516 | system_cpu_s=0.062
+REQ | GET /main | 200 | latency_ms=190.42 | rss_diff=12288 | user_cpu_s=0.047 | system_cpu_s=0.000
+2025-11-30 03:32:06 | A-UT-02 | Resultado: OK | 1.963s
+REQ | GET / | 200 | latency_ms=139.11 | rss_diff=16384 | user_cpu_s=0.016 | system_cpu_s=0.016
+REQ | POST /usuarios/login/ | 401 | latency_ms=694.81 | rss_diff=65536 | user_cpu_s=0.531 | system_cpu_s=0.047
+2025-11-30 03:32:09 | A-UT-03 | Resultado: OK | 2.372s
+REQ | GET / | 200 | latency_ms=0.53 | rss_diff=12288 | user_cpu_s=0.000 | system_cpu_s=0.000
+REQ | POST /usuarios/login/ | 200 | latency_ms=658.48 | rss_diff=172032 | user_cpu_s=0.531 | system_cpu_s=0.047
+REQ | GET /main | 200 | latency_ms=177.70 | rss_diff=12288 | user_cpu_s=0.031 | system_cpu_s=0.016
+REQ | GET /core/producto/update/1/ | 401 | latency_ms=151.70 | rss_diff=20480 | user_cpu_s=0.031 | system_cpu_s=0.000
+REQ | GET / | 200 | latency_ms=0.41 | rss_diff=0 | user_cpu_s=0.000 | system_cpu_s=0.000
+Fin. Duración total: 7.689s
 Inicio
-2025-11-30 02:28:38 | A-UT-01 | Resultado: OK | 3.478s
-2025-11-30 02:28:40 | A-UT-02 | Resultado: OK | 1.909s
-2025-11-30 02:28:44 | A-UT-03 | Resultado: OK | 2.397s
-Fin. Duración total: 7.784s
+2025-11-30 03:32:17 | H-UT-01 | Resultado: OK | 0.000s
+2025-11-30 03:32:18 | H-UT-02 | Resultado: OK | 0.000s
+Fin. Duración total: 0.000s
 Inicio
-2025-11-30 02:28:52 | H-UT-01 | Resultado: OK | 0.000s
-2025-11-30 02:28:53 | H-UT-02 | Resultado: OK | 0.000s
+2025-11-30 03:43:12 | P-UT-01 | Resultado: OK | 4.825s
+REQ | GET / | 200 | latency_ms=10.18 | rss_diff=36864 | user_cpu_s=0.000 | system_cpu_s=0.000
+REQ | GET /core/producto/ | 200 | latency_ms=199.77 | rss_diff=49152 | user_cpu_s=0.062 | system_cpu_s=0.016
+REQ | GET /core/producto/next_code/E/ | 200 | latency_ms=149.64 | rss_diff=49152 | user_cpu_s=0.031 | system_cpu_s=0.000
+REQ | POST /core/producto/add/ | 302 | latency_ms=319.51 | rss_diff=24576 | user_cpu_s=0.031 | system_cpu_s=0.016
+REQ | GET /core/producto/ | 200 | latency_ms=193.87 | rss_diff=40960 | user_cpu_s=0.031 | system_cpu_s=0.016
+2025-11-30 03:43:17 | P-UT-02 | Resultado: OK | 4.125s
+REQ | GET / | 200 | latency_ms=154.00 | rss_diff=258048 | user_cpu_s=0.047 | system_cpu_s=0.000
+REQ | GET /core/producto/ | 200 | latency_ms=196.87 | rss_diff=32768 | user_cpu_s=0.016 | system_cpu_s=0.016
+REQ | GET /core/producto/next_code/E/ | 200 | latency_ms=156.32 | rss_diff=212992 | user_cpu_s=0.062 | system_cpu_s=0.031
+REQ | POST /core/producto/add/ | 302 | latency_ms=186.98 | rss_diff=200704 | user_cpu_s=0.031 | system_cpu_s=0.016
+REQ | GET /core/producto/ | 200 | latency_ms=244.97 | rss_diff=24576 | user_cpu_s=0.031 | system_cpu_s=0.000
+2025-11-30 03:43:24 | P-UT-03 | Resultado: OK | 3.944s
+REQ | GET / | 200 | latency_ms=226.41 | rss_diff=176128 | user_cpu_s=0.078 | system_cpu_s=0.000
+REQ | GET /core/producto/ | 200 | latency_ms=353.98 | rss_diff=16384 | user_cpu_s=0.031 | system_cpu_s=0.000
+REQ | GET /core/producto/next_code/E/ | 200 | latency_ms=163.56 | rss_diff=262144 | user_cpu_s=0.078 | system_cpu_s=0.016
+REQ | POST /core/producto/add/ | 302 | latency_ms=246.48 | rss_diff=217088 | user_cpu_s=0.047 | system_cpu_s=0.000
+REQ | GET /core/producto/ | 200 | latency_ms=166.65 | rss_diff=0 | user_cpu_s=0.031 | system_cpu_s=0.016
+Fin. Duración total: 12.894s
+Inicio
+2025-11-30 03:43:38 | S-UT-01 | Resultado: OK | 3.998s
+REQ | GET / | 200 | latency_ms=10.32 | rss_diff=53248 | user_cpu_s=0.016 | system_cpu_s=0.000
+REQ | GET /core/producto/ | 200 | latency_ms=333.31 | rss_diff=53248 | user_cpu_s=0.062 | system_cpu_s=0.000
+REQ | GET /core/producto/json/1/ | 200 | latency_ms=174.11 | rss_diff=32768 | user_cpu_s=0.000 | system_cpu_s=0.031
+REQ | POST /core/producto/update/1/ | 302 | latency_ms=340.89 | rss_diff=36864 | user_cpu_s=0.031 | system_cpu_s=0.047
+REQ | GET /core/producto/ | 200 | latency_ms=167.69 | rss_diff=24576 | user_cpu_s=0.016 | system_cpu_s=0.000
+2025-11-30 03:43:42 | S-UT-02 | Resultado: OK | 2.987s
+REQ | GET / | 200 | latency_ms=158.28 | rss_diff=8192 | user_cpu_s=0.047 | system_cpu_s=0.000
+REQ | GET /core/producto/ | 200 | latency_ms=188.49 | rss_diff=8192 | user_cpu_s=0.016 | system_cpu_s=0.016
+REQ | GET /core/producto/json/2/ | 200 | latency_ms=146.42 | rss_diff=20480 | user_cpu_s=0.047 | system_cpu_s=0.000
+REQ | POST /core/producto/update/2/ | 302 | latency_ms=332.59 | rss_diff=12288 | user_cpu_s=0.047 | system_cpu_s=0.000
+REQ | GET /core/producto/ | 200 | latency_ms=172.36 | rss_diff=32768 | user_cpu_s=0.016 | system_cpu_s=0.016
+2025-11-30 03:43:46 | S-UT-03 | Resultado: OK | 3.015s
+REQ | GET / | 200 | latency_ms=127.12 | rss_diff=180224 | user_cpu_s=0.031 | system_cpu_s=0.000
+REQ | GET /core/producto/ | 200 | latency_ms=186.13 | rss_diff=12288 | user_cpu_s=0.016 | system_cpu_s=0.016
+REQ | GET /core/producto/json/3/ | 200 | latency_ms=158.35 | rss_diff=0 | user_cpu_s=0.031 | system_cpu_s=0.000
+Fin. Duración total: 10.000s
+Inicio
+2025-11-30 03:44:02 | V-UT-01 | Resultado: OK | 5.178s
+REQ | GET / | 200 | latency_ms=12.47 | rss_diff=69632 | user_cpu_s=0.000 | system_cpu_s=0.016
+REQ | GET /core/producto/ | 200 | latency_ms=201.58 | rss_diff=20480 | user_cpu_s=0.047 | system_cpu_s=0.031
+REQ | GET /core/producto/next_code/P/ | 200 | latency_ms=144.63 | rss_diff=106496 | user_cpu_s=0.016 | system_cpu_s=0.016
+REQ | POST /core/producto/add/ | 302 | latency_ms=169.79 | rss_diff=16384 | user_cpu_s=0.031 | system_cpu_s=0.000
+REQ | GET /core/producto/ | 200 | latency_ms=175.14 | rss_diff=12288 | user_cpu_s=0.031 | system_cpu_s=0.016
+2025-11-30 03:44:09 | V-UT-02 | Resultado: OK | 6.101s
+REQ | GET / | 200 | latency_ms=139.76 | rss_diff=286720 | user_cpu_s=0.031 | system_cpu_s=0.000
+REQ | GET /core/producto/ | 200 | latency_ms=188.55 | rss_diff=0 | user_cpu_s=0.031 | system_cpu_s=0.016
+REQ | POST /core/producto/add/ | 302 | latency_ms=269.26 | rss_diff=8192 | user_cpu_s=0.047 | system_cpu_s=0.000
+REQ | GET /core/producto/ | 200 | latency_ms=173.92 | rss_diff=12288 | user_cpu_s=0.031 | system_cpu_s=0.000
+2025-11-30 03:44:14 | V-UT-03 | Resultado: OK | 3.480s
+REQ | GET / | 200 | latency_ms=134.81 | rss_diff=12288 | user_cpu_s=0.031 | system_cpu_s=0.000
+REQ | GET /core/producto/ | 200 | latency_ms=175.87 | rss_diff=24576 | user_cpu_s=0.016 | system_cpu_s=0.000
+REQ | POST /core/producto/add/ | 302 | latency_ms=162.72 | rss_diff=24576 | user_cpu_s=0.062 | system_cpu_s=0.000
+REQ | GET /core/producto/next_code/P/ | 200 | latency_ms=151.99 | rss_diff=135168 | user_cpu_s=0.094 | system_cpu_s=0.000
+REQ | GET /core/producto/ | 200 | latency_ms=159.14 | rss_diff=36864 | user_cpu_s=0.031 | system_cpu_s=0.000
+Fin. Duración total: 14.760s
+Inicio
+2025-11-30 03:44:27 | A-UT-01 | Resultado: OK | 3.071s
+REQ | GET / | 200 | latency_ms=8.94 | rss_diff=40960 | user_cpu_s=0.016 | system_cpu_s=0.000
+REQ | POST /usuarios/login/ | 200 | latency_ms=680.41 | rss_diff=4096 | user_cpu_s=0.453 | system_cpu_s=0.016
+REQ | GET /main | 200 | latency_ms=180.80 | rss_diff=0 | user_cpu_s=0.031 | system_cpu_s=0.031
+2025-11-30 03:44:30 | A-UT-02 | Resultado: OK | 1.919s
+REQ | GET / | 200 | latency_ms=151.13 | rss_diff=24576 | user_cpu_s=0.016 | system_cpu_s=0.016
+REQ | POST /usuarios/login/ | 401 | latency_ms=625.54 | rss_diff=90112 | user_cpu_s=0.484 | system_cpu_s=0.031
+2025-11-30 03:44:33 | A-UT-03 | Resultado: OK | 2.254s
+REQ | GET / | 200 | latency_ms=0.43 | rss_diff=4096 | user_cpu_s=0.000 | system_cpu_s=0.000
+REQ | POST /usuarios/login/ | 200 | latency_ms=625.74 | rss_diff=188416 | user_cpu_s=0.516 | system_cpu_s=0.000
+REQ | GET /main | 200 | latency_ms=181.15 | rss_diff=65536 | user_cpu_s=0.047 | system_cpu_s=0.000
+REQ | GET /core/producto/update/1/ | 401 | latency_ms=129.42 | rss_diff=73728 | user_cpu_s=0.016 | system_cpu_s=0.016
+REQ | GET / | 200 | latency_ms=0.40 | rss_diff=0 | user_cpu_s=0.000 | system_cpu_s=0.000
+Fin. Duración total: 7.244s
+Inicio
+2025-11-30 03:44:41 | H-UT-01 | Resultado: OK | 0.000s
+2025-11-30 03:44:42 | H-UT-02 | Resultado: OK | 0.000s
+Fin. Duración total: 0.000s
+Inicio
+2025-11-30 03:45:21 | P-UT-01 | Resultado: OK | 4.574s
+REQ | GET / | 200 | latency_ms=7.93 | rss_diff=40960 | user_cpu_s=0.000 | system_cpu_s=0.000
+REQ | GET /core/producto/ | 200 | latency_ms=188.14 | rss_diff=20480 | user_cpu_s=0.047 | system_cpu_s=0.000
+REQ | GET /core/producto/next_code/E/ | 200 | latency_ms=143.95 | rss_diff=36864 | user_cpu_s=0.016 | system_cpu_s=0.000
+REQ | POST /core/producto/add/ | 302 | latency_ms=330.04 | rss_diff=12288 | user_cpu_s=0.047 | system_cpu_s=0.016
+REQ | GET /core/producto/ | 200 | latency_ms=195.90 | rss_diff=45056 | user_cpu_s=0.047 | system_cpu_s=0.016
+2025-11-30 03:45:26 | P-UT-02 | Resultado: OK | 3.342s
+REQ | GET / | 200 | latency_ms=132.04 | rss_diff=118784 | user_cpu_s=0.062 | system_cpu_s=0.000
+REQ | GET /core/producto/ | 200 | latency_ms=178.16 | rss_diff=24576 | user_cpu_s=0.031 | system_cpu_s=0.000
+REQ | GET /core/producto/next_code/E/ | 200 | latency_ms=135.80 | rss_diff=401408 | user_cpu_s=0.047 | system_cpu_s=0.016
+REQ | POST /core/producto/add/ | 302 | latency_ms=175.57 | rss_diff=520192 | user_cpu_s=0.062 | system_cpu_s=0.016
+REQ | GET /core/producto/ | 200 | latency_ms=172.77 | rss_diff=20480 | user_cpu_s=0.031 | system_cpu_s=0.000
+2025-11-30 03:45:30 | P-UT-03 | Resultado: OK | 3.949s
+REQ | GET / | 200 | latency_ms=143.65 | rss_diff=8192 | user_cpu_s=0.016 | system_cpu_s=0.016
+REQ | GET /core/producto/ | 200 | latency_ms=170.03 | rss_diff=8192 | user_cpu_s=0.016 | system_cpu_s=0.016
+REQ | GET /core/producto/next_code/E/ | 200 | latency_ms=144.09 | rss_diff=151552 | user_cpu_s=0.094 | system_cpu_s=0.000
+REQ | POST /core/producto/add/ | 302 | latency_ms=264.20 | rss_diff=225280 | user_cpu_s=0.094 | system_cpu_s=0.000
+REQ | GET /core/producto/ | 200 | latency_ms=173.30 | rss_diff=40960 | user_cpu_s=0.031 | system_cpu_s=0.000
+Fin. Duración total: 11.865s
+Inicio
+2025-11-30 03:45:44 | S-UT-01 | Resultado: OK | 3.860s
+REQ | GET / | 200 | latency_ms=8.16 | rss_diff=49152 | user_cpu_s=0.000 | system_cpu_s=0.000
+REQ | GET /core/producto/ | 200 | latency_ms=262.50 | rss_diff=65536 | user_cpu_s=0.016 | system_cpu_s=0.016
+REQ | GET /core/producto/json/1/ | 200 | latency_ms=155.67 | rss_diff=32768 | user_cpu_s=0.047 | system_cpu_s=0.000
+REQ | POST /core/producto/update/1/ | 302 | latency_ms=335.16 | rss_diff=12288 | user_cpu_s=0.000 | system_cpu_s=0.016
+REQ | GET /core/producto/ | 200 | latency_ms=183.26 | rss_diff=20480 | user_cpu_s=0.031 | system_cpu_s=0.000
+2025-11-30 03:45:48 | S-UT-02 | Resultado: OK | 2.785s
+REQ | GET / | 200 | latency_ms=146.58 | rss_diff=53248 | user_cpu_s=0.047 | system_cpu_s=0.000
+REQ | GET /core/producto/ | 200 | latency_ms=182.92 | rss_diff=24576 | user_cpu_s=0.016 | system_cpu_s=0.016
+REQ | GET /core/producto/json/2/ | 200 | latency_ms=148.63 | rss_diff=57344 | user_cpu_s=0.031 | system_cpu_s=0.000
+REQ | POST /core/producto/update/2/ | 302 | latency_ms=334.59 | rss_diff=4096 | user_cpu_s=0.016 | system_cpu_s=0.016
+REQ | GET /core/producto/ | 200 | latency_ms=168.20 | rss_diff=28672 | user_cpu_s=0.047 | system_cpu_s=0.000
+2025-11-30 03:45:52 | S-UT-03 | Resultado: OK | 2.924s
+REQ | GET / | 200 | latency_ms=136.89 | rss_diff=73728 | user_cpu_s=0.016 | system_cpu_s=0.000
+REQ | GET /core/producto/ | 200 | latency_ms=186.53 | rss_diff=16384 | user_cpu_s=0.047 | system_cpu_s=0.000
+REQ | GET /core/producto/json/3/ | 200 | latency_ms=148.52 | rss_diff=53248 | user_cpu_s=0.031 | system_cpu_s=0.000
+Fin. Duración total: 9.569s
+Inicio
+2025-11-30 03:46:07 | V-UT-01 | Resultado: OK | 5.103s
+REQ | GET / | 200 | latency_ms=8.12 | rss_diff=49152 | user_cpu_s=0.000 | system_cpu_s=0.000
+REQ | GET /core/producto/ | 200 | latency_ms=249.76 | rss_diff=24576 | user_cpu_s=0.016 | system_cpu_s=0.016
+REQ | GET /core/producto/next_code/P/ | 200 | latency_ms=146.56 | rss_diff=167936 | user_cpu_s=0.000 | system_cpu_s=0.031
+REQ | POST /core/producto/add/ | 302 | latency_ms=160.65 | rss_diff=16384 | user_cpu_s=0.031 | system_cpu_s=0.000
+REQ | GET /core/producto/ | 200 | latency_ms=156.93 | rss_diff=12288 | user_cpu_s=0.031 | system_cpu_s=0.000
+2025-11-30 03:46:14 | V-UT-02 | Resultado: OK | 5.815s
+REQ | GET / | 200 | latency_ms=147.22 | rss_diff=8192 | user_cpu_s=0.016 | system_cpu_s=0.000
+REQ | GET /core/producto/ | 200 | latency_ms=156.64 | rss_diff=8192 | user_cpu_s=0.031 | system_cpu_s=0.000
+REQ | POST /core/producto/add/ | 302 | latency_ms=139.14 | rss_diff=4096 | user_cpu_s=0.031 | system_cpu_s=0.000
+REQ | GET /core/producto/ | 200 | latency_ms=182.78 | rss_diff=16384 | user_cpu_s=0.016 | system_cpu_s=0.016
+2025-11-30 03:46:18 | V-UT-03 | Resultado: OK | 3.464s
+REQ | GET / | 200 | latency_ms=141.43 | rss_diff=16384 | user_cpu_s=0.031 | system_cpu_s=0.000
+REQ | GET /core/producto/ | 200 | latency_ms=170.78 | rss_diff=20480 | user_cpu_s=0.047 | system_cpu_s=0.000
+REQ | POST /core/producto/add/ | 302 | latency_ms=171.10 | rss_diff=24576 | user_cpu_s=0.047 | system_cpu_s=0.016
+REQ | GET /core/producto/next_code/P/ | 200 | latency_ms=153.81 | rss_diff=126976 | user_cpu_s=0.031 | system_cpu_s=0.031
+REQ | GET /core/producto/ | 200 | latency_ms=175.21 | rss_diff=90112 | user_cpu_s=0.016 | system_cpu_s=0.016
+Fin. Duración total: 14.383s
+Inicio
+2025-11-30 03:46:31 | A-UT-01 | Resultado: OK | 3.044s
+REQ | GET / | 200 | latency_ms=8.48 | rss_diff=49152 | user_cpu_s=0.000 | system_cpu_s=0.000
+REQ | POST /usuarios/login/ | 200 | latency_ms=643.44 | rss_diff=12288 | user_cpu_s=0.469 | system_cpu_s=0.031
+REQ | GET /main | 200 | latency_ms=170.31 | rss_diff=53248 | user_cpu_s=0.047 | system_cpu_s=0.000
+2025-11-30 03:46:34 | A-UT-02 | Resultado: OK | 1.782s
+REQ | GET / | 200 | latency_ms=142.61 | rss_diff=8192 | user_cpu_s=0.031 | system_cpu_s=0.000
+REQ | POST /usuarios/login/ | 401 | latency_ms=589.67 | rss_diff=8192 | user_cpu_s=0.469 | system_cpu_s=0.000
+2025-11-30 03:46:37 | A-UT-03 | Resultado: OK | 2.226s
+REQ | GET / | 200 | latency_ms=0.58 | rss_diff=0 | user_cpu_s=0.000 | system_cpu_s=0.000
+REQ | POST /usuarios/login/ | 200 | latency_ms=580.30 | rss_diff=245760 | user_cpu_s=0.469 | system_cpu_s=0.000
+REQ | GET /main | 200 | latency_ms=225.90 | rss_diff=20480 | user_cpu_s=0.047 | system_cpu_s=0.000
+REQ | GET /core/producto/update/1/ | 401 | latency_ms=139.68 | rss_diff=28672 | user_cpu_s=0.047 | system_cpu_s=0.000
+REQ | GET / | 200 | latency_ms=0.37 | rss_diff=0 | user_cpu_s=0.000 | system_cpu_s=0.000
+Fin. Duración total: 7.052s
+Inicio
+2025-11-30 03:46:45 | H-UT-01 | Resultado: OK | 0.000s
+2025-11-30 03:46:46 | H-UT-02 | Resultado: OK | 0.000s
+Fin. Duración total: 0.000s
+Inicio
+2025-11-30 03:50:06 | P-UT-01 | Resultado: OK | 4.455s
+REQ | GET / | 200 | latency_ms=9.44 | rss_diff=40960 | user_cpu_s=0.000 | system_cpu_s=0.016
+REQ | GET /core/producto/ | 200 | latency_ms=194.52 | rss_diff=28672 | user_cpu_s=0.016 | system_cpu_s=0.016
+REQ | GET /core/producto/next_code/E/ | 200 | latency_ms=148.76 | rss_diff=36864 | user_cpu_s=0.016 | system_cpu_s=0.016
+REQ | POST /core/producto/add/ | 302 | latency_ms=329.15 | rss_diff=16384 | user_cpu_s=0.047 | system_cpu_s=0.000
+REQ | GET /core/producto/ | 200 | latency_ms=167.22 | rss_diff=32768 | user_cpu_s=0.031 | system_cpu_s=0.000
+2025-11-30 03:50:11 | P-UT-02 | Resultado: OK | 3.307s
+REQ | GET / | 200 | latency_ms=146.64 | rss_diff=49152 | user_cpu_s=0.031 | system_cpu_s=0.000
+REQ | GET /core/producto/ | 200 | latency_ms=192.69 | rss_diff=12288 | user_cpu_s=0.000 | system_cpu_s=0.047
+REQ | GET /core/producto/next_code/E/ | 200 | latency_ms=134.24 | rss_diff=503808 | user_cpu_s=0.031 | system_cpu_s=0.000
+REQ | POST /core/producto/add/ | 302 | latency_ms=195.75 | rss_diff=610304 | user_cpu_s=0.047 | system_cpu_s=0.016
+REQ | GET /core/producto/ | 200 | latency_ms=166.38 | rss_diff=36864 | user_cpu_s=0.016 | system_cpu_s=0.016
+2025-11-30 03:50:15 | P-UT-03 | Resultado: OK | 3.937s
+REQ | GET / | 200 | latency_ms=134.65 | rss_diff=413696 | user_cpu_s=0.016 | system_cpu_s=0.016
+REQ | GET /core/producto/ | 200 | latency_ms=170.42 | rss_diff=0 | user_cpu_s=0.031 | system_cpu_s=0.000
+REQ | GET /core/producto/next_code/E/ | 200 | latency_ms=136.06 | rss_diff=262144 | user_cpu_s=0.031 | system_cpu_s=0.000
+REQ | POST /core/producto/add/ | 302 | latency_ms=258.07 | rss_diff=368640 | user_cpu_s=0.062 | system_cpu_s=0.000
+REQ | GET /core/producto/ | 200 | latency_ms=157.32 | rss_diff=45056 | user_cpu_s=0.016 | system_cpu_s=0.000
+Fin. Duración total: 11.699s
+Inicio
+2025-11-30 03:50:30 | S-UT-01 | Resultado: OK | 4.445s
+REQ | GET / | 200 | latency_ms=8.56 | rss_diff=45056 | user_cpu_s=0.000 | system_cpu_s=0.000
+REQ | GET /core/producto/ | 200 | latency_ms=335.29 | rss_diff=49152 | user_cpu_s=0.016 | system_cpu_s=0.031
+REQ | GET /core/producto/json/1/ | 200 | latency_ms=148.24 | rss_diff=32768 | user_cpu_s=0.016 | system_cpu_s=0.000
+REQ | POST /core/producto/update/1/ | 302 | latency_ms=337.51 | rss_diff=32768 | user_cpu_s=0.047 | system_cpu_s=0.000
+REQ | GET /core/producto/ | 200 | latency_ms=184.41 | rss_diff=8192 | user_cpu_s=0.031 | system_cpu_s=0.000
+2025-11-30 03:50:34 | S-UT-02 | Resultado: OK | 2.749s
+REQ | GET / | 200 | latency_ms=135.34 | rss_diff=77824 | user_cpu_s=0.000 | system_cpu_s=0.016
+REQ | GET /core/producto/ | 200 | latency_ms=188.01 | rss_diff=0 | user_cpu_s=0.031 | system_cpu_s=0.000
+REQ | GET /core/producto/json/2/ | 200 | latency_ms=153.12 | rss_diff=40960 | user_cpu_s=0.031 | system_cpu_s=0.000
+REQ | POST /core/producto/update/2/ | 302 | latency_ms=339.22 | rss_diff=20480 | user_cpu_s=0.047 | system_cpu_s=0.000
+REQ | GET /core/producto/ | 200 | latency_ms=179.26 | rss_diff=28672 | user_cpu_s=0.047 | system_cpu_s=0.000
+2025-11-30 03:50:38 | S-UT-03 | Resultado: OK | 2.942s
+REQ | GET / | 200 | latency_ms=136.69 | rss_diff=188416 | user_cpu_s=0.031 | system_cpu_s=0.016
+REQ | GET /core/producto/ | 200 | latency_ms=194.47 | rss_diff=8192 | user_cpu_s=0.047 | system_cpu_s=0.016
+REQ | GET /core/producto/json/3/ | 200 | latency_ms=154.91 | rss_diff=12288 | user_cpu_s=0.031 | system_cpu_s=0.000
+Fin. Duración total: 10.135s
+Inicio
+2025-11-30 03:50:53 | V-UT-01 | Resultado: OK | 5.248s
+REQ | GET / | 200 | latency_ms=8.38 | rss_diff=45056 | user_cpu_s=0.000 | system_cpu_s=0.016
+REQ | GET /core/producto/ | 200 | latency_ms=316.25 | rss_diff=16384 | user_cpu_s=0.031 | system_cpu_s=0.016
+REQ | GET /core/producto/next_code/P/ | 200 | latency_ms=135.31 | rss_diff=49152 | user_cpu_s=0.031 | system_cpu_s=0.000
+REQ | POST /core/producto/add/ | 302 | latency_ms=159.78 | rss_diff=28672 | user_cpu_s=0.016 | system_cpu_s=0.016
+REQ | GET /core/producto/ | 200 | latency_ms=171.77 | rss_diff=4096 | user_cpu_s=0.016 | system_cpu_s=0.000
+2025-11-30 03:51:00 | V-UT-02 | Resultado: OK | 5.779s
+REQ | GET / | 200 | latency_ms=141.92 | rss_diff=0 | user_cpu_s=0.031 | system_cpu_s=0.016
+REQ | GET /core/producto/ | 200 | latency_ms=157.43 | rss_diff=0 | user_cpu_s=0.016 | system_cpu_s=0.016
+REQ | POST /core/producto/add/ | 302 | latency_ms=163.70 | rss_diff=24576 | user_cpu_s=0.016 | system_cpu_s=0.031
+REQ | GET /core/producto/ | 200 | latency_ms=172.21 | rss_diff=4096 | user_cpu_s=0.047 | system_cpu_s=0.000
+2025-11-30 03:51:04 | V-UT-03 | Resultado: OK | 3.500s
+REQ | GET / | 200 | latency_ms=131.67 | rss_diff=12288 | user_cpu_s=0.016 | system_cpu_s=0.000
+REQ | GET /core/producto/ | 200 | latency_ms=174.54 | rss_diff=24576 | user_cpu_s=0.031 | system_cpu_s=0.000
+REQ | POST /core/producto/add/ | 302 | latency_ms=169.60 | rss_diff=53248 | user_cpu_s=0.047 | system_cpu_s=0.000
+REQ | GET /core/producto/next_code/P/ | 200 | latency_ms=152.24 | rss_diff=221184 | user_cpu_s=0.047 | system_cpu_s=0.000
+REQ | GET /core/producto/ | 200 | latency_ms=171.09 | rss_diff=167936 | user_cpu_s=0.047 | system_cpu_s=0.000
+Fin. Duración total: 14.527s
+Inicio
+2025-11-30 03:51:17 | A-UT-01 | Resultado: OK | 3.181s
+REQ | GET / | 200 | latency_ms=8.63 | rss_diff=45056 | user_cpu_s=0.016 | system_cpu_s=0.000
+REQ | POST /usuarios/login/ | 200 | latency_ms=616.35 | rss_diff=8192 | user_cpu_s=0.500 | system_cpu_s=0.016
+REQ | GET /main | 200 | latency_ms=173.36 | rss_diff=4096 | user_cpu_s=0.016 | system_cpu_s=0.000
+2025-11-30 03:51:20 | A-UT-02 | Resultado: OK | 1.794s
+REQ | GET / | 200 | latency_ms=141.58 | rss_diff=12288 | user_cpu_s=0.031 | system_cpu_s=0.000
+REQ | POST /usuarios/login/ | 401 | latency_ms=606.87 | rss_diff=12288 | user_cpu_s=0.469 | system_cpu_s=0.000
+2025-11-30 03:51:23 | A-UT-03 | Resultado: OK | 2.251s
+REQ | GET / | 200 | latency_ms=0.58 | rss_diff=0 | user_cpu_s=0.000 | system_cpu_s=0.000
+REQ | POST /usuarios/login/ | 200 | latency_ms=578.36 | rss_diff=258048 | user_cpu_s=0.484 | system_cpu_s=0.000
+REQ | GET /main | 200 | latency_ms=234.10 | rss_diff=36864 | user_cpu_s=0.031 | system_cpu_s=0.000
+REQ | GET /core/producto/update/1/ | 401 | latency_ms=145.73 | rss_diff=16384 | user_cpu_s=0.016 | system_cpu_s=0.000
+REQ | GET / | 200 | latency_ms=0.39 | rss_diff=0 | user_cpu_s=0.000 | system_cpu_s=0.000
+Fin. Duración total: 7.226s
+Inicio
+2025-11-30 03:51:31 | H-UT-01 | Resultado: OK | 0.000s
+2025-11-30 03:51:32 | H-UT-02 | Resultado: OK | 0.000s
+Fin. Duración total: 0.000s
+Inicio
+2025-11-30 03:52:32 | P-UT-01 | Resultado: OK | 4.422s
+REQ | GET / | 200 | latency_ms=11.00 | rss_diff=36864 | user_cpu_s=0.000 | system_cpu_s=0.016
+REQ | GET /core/producto/ | 200 | latency_ms=183.91 | rss_diff=32768 | user_cpu_s=0.031 | system_cpu_s=0.031
+REQ | GET /core/producto/next_code/E/ | 200 | latency_ms=131.26 | rss_diff=49152 | user_cpu_s=0.016 | system_cpu_s=0.016
+REQ | POST /core/producto/add/ | 302 | latency_ms=327.59 | rss_diff=28672 | user_cpu_s=0.031 | system_cpu_s=0.000
+REQ | GET /core/producto/ | 200 | latency_ms=174.42 | rss_diff=28672 | user_cpu_s=0.031 | system_cpu_s=0.000
+2025-11-30 03:52:37 | P-UT-02 | Resultado: OK | 3.808s
+REQ | GET / | 200 | latency_ms=143.37 | rss_diff=176128 | user_cpu_s=0.031 | system_cpu_s=0.000
+REQ | GET /core/producto/ | 200 | latency_ms=183.85 | rss_diff=28672 | user_cpu_s=0.031 | system_cpu_s=0.000
+REQ | GET /core/producto/next_code/E/ | 200 | latency_ms=141.47 | rss_diff=319488 | user_cpu_s=0.016 | system_cpu_s=0.000
+REQ | POST /core/producto/add/ | 302 | latency_ms=199.73 | rss_diff=376832 | user_cpu_s=0.062 | system_cpu_s=0.000
+REQ | GET /core/producto/ | 200 | latency_ms=169.24 | rss_diff=114688 | user_cpu_s=0.031 | system_cpu_s=0.016
+2025-11-30 03:52:41 | P-UT-03 | Resultado: OK | 3.343s
+REQ | GET / | 200 | latency_ms=145.06 | rss_diff=114688 | user_cpu_s=0.031 | system_cpu_s=0.016
+REQ | GET /core/producto/ | 200 | latency_ms=166.94 | rss_diff=0 | user_cpu_s=0.031 | system_cpu_s=0.000
+REQ | GET /core/producto/next_code/E/ | 200 | latency_ms=135.57 | rss_diff=221184 | user_cpu_s=0.031 | system_cpu_s=0.000
+REQ | POST /core/producto/add/ | 302 | latency_ms=290.99 | rss_diff=348160 | user_cpu_s=0.094 | system_cpu_s=0.000
+REQ | GET /core/producto/ | 200 | latency_ms=175.51 | rss_diff=45056 | user_cpu_s=0.031 | system_cpu_s=0.016
+Fin. Duración total: 11.573s
+Inicio
+2025-11-30 03:52:55 | S-UT-01 | Resultado: OK | 4.398s
+REQ | GET / | 200 | latency_ms=8.25 | rss_diff=53248 | user_cpu_s=0.000 | system_cpu_s=0.000
+REQ | GET /core/producto/ | 200 | latency_ms=270.89 | rss_diff=53248 | user_cpu_s=0.000 | system_cpu_s=0.047
+REQ | GET /core/producto/json/1/ | 200 | latency_ms=138.66 | rss_diff=45056 | user_cpu_s=0.016 | system_cpu_s=0.016
+REQ | POST /core/producto/update/1/ | 302 | latency_ms=372.61 | rss_diff=8192 | user_cpu_s=0.047 | system_cpu_s=0.000
+REQ | GET /core/producto/ | 200 | latency_ms=187.89 | rss_diff=20480 | user_cpu_s=0.062 | system_cpu_s=0.000
+2025-11-30 03:52:59 | S-UT-02 | Resultado: OK | 2.698s
+REQ | GET / | 200 | latency_ms=141.06 | rss_diff=8192 | user_cpu_s=0.016 | system_cpu_s=0.000
+REQ | GET /core/producto/ | 200 | latency_ms=173.43 | rss_diff=24576 | user_cpu_s=0.016 | system_cpu_s=0.016
+REQ | GET /core/producto/json/2/ | 200 | latency_ms=154.99 | rss_diff=49152 | user_cpu_s=0.016 | system_cpu_s=0.000
+REQ | POST /core/producto/update/2/ | 302 | latency_ms=342.92 | rss_diff=4096 | user_cpu_s=0.047 | system_cpu_s=0.000
+REQ | GET /core/producto/ | 200 | latency_ms=169.07 | rss_diff=36864 | user_cpu_s=0.016 | system_cpu_s=0.016
+2025-11-30 03:53:02 | S-UT-03 | Resultado: OK | 2.983s
+REQ | GET / | 200 | latency_ms=179.93 | rss_diff=94208 | user_cpu_s=0.031 | system_cpu_s=0.000
+REQ | GET /core/producto/ | 200 | latency_ms=186.84 | rss_diff=36864 | user_cpu_s=0.016 | system_cpu_s=0.016
+REQ | GET /core/producto/json/3/ | 200 | latency_ms=150.22 | rss_diff=12288 | user_cpu_s=0.031 | system_cpu_s=0.000
+Fin. Duración total: 10.079s
+Inicio
+2025-11-30 03:53:18 | V-UT-01 | Resultado: OK | 5.140s
+REQ | GET / | 200 | latency_ms=9.96 | rss_diff=45056 | user_cpu_s=0.000 | system_cpu_s=0.000
+REQ | GET /core/producto/ | 200 | latency_ms=187.60 | rss_diff=45056 | user_cpu_s=0.016 | system_cpu_s=0.031
+REQ | GET /core/producto/next_code/P/ | 200 | latency_ms=146.56 | rss_diff=45056 | user_cpu_s=0.016 | system_cpu_s=0.016
+REQ | POST /core/producto/add/ | 302 | latency_ms=153.57 | rss_diff=12288 | user_cpu_s=0.016 | system_cpu_s=0.031
+REQ | GET /core/producto/ | 200 | latency_ms=174.10 | rss_diff=8192 | user_cpu_s=0.016 | system_cpu_s=0.000
+2025-11-30 03:53:24 | V-UT-02 | Resultado: OK | 5.846s
+REQ | GET / | 200 | latency_ms=144.79 | rss_diff=81920 | user_cpu_s=0.016 | system_cpu_s=0.000
+REQ | GET /core/producto/ | 200 | latency_ms=169.04 | rss_diff=12288 | user_cpu_s=0.016 | system_cpu_s=0.016
+REQ | POST /core/producto/add/ | 302 | latency_ms=255.67 | rss_diff=4096 | user_cpu_s=0.031 | system_cpu_s=0.000
+REQ | GET /core/producto/ | 200 | latency_ms=180.46 | rss_diff=12288 | user_cpu_s=0.031 | system_cpu_s=0.016
+2025-11-30 03:53:29 | V-UT-03 | Resultado: OK | 3.525s
+REQ | GET / | 200 | latency_ms=133.79 | rss_diff=212992 | user_cpu_s=0.016 | system_cpu_s=0.016
+REQ | GET /core/producto/ | 200 | latency_ms=158.40 | rss_diff=16384 | user_cpu_s=0.031 | system_cpu_s=0.000
+REQ | POST /core/producto/add/ | 302 | latency_ms=155.67 | rss_diff=393216 | user_cpu_s=0.016 | system_cpu_s=0.031
+REQ | GET /core/producto/next_code/P/ | 200 | latency_ms=150.15 | rss_diff=688128 | user_cpu_s=0.047 | system_cpu_s=0.016
+REQ | GET /core/producto/ | 200 | latency_ms=176.07 | rss_diff=258048 | user_cpu_s=0.094 | system_cpu_s=0.000
+Fin. Duración total: 14.511s
+Inicio
+2025-11-30 03:53:42 | A-UT-01 | Resultado: OK | 3.000s
+REQ | GET / | 200 | latency_ms=8.05 | rss_diff=53248 | user_cpu_s=0.000 | system_cpu_s=0.000
+REQ | POST /usuarios/login/ | 200 | latency_ms=630.73 | rss_diff=12288 | user_cpu_s=0.422 | system_cpu_s=0.016
+REQ | GET /main | 200 | latency_ms=186.47 | rss_diff=12288 | user_cpu_s=0.031 | system_cpu_s=0.000
+2025-11-30 03:53:44 | A-UT-02 | Resultado: OK | 1.755s
+REQ | GET / | 200 | latency_ms=154.61 | rss_diff=32768 | user_cpu_s=0.016 | system_cpu_s=0.000
+REQ | POST /usuarios/login/ | 401 | latency_ms=575.07 | rss_diff=4096 | user_cpu_s=0.438 | system_cpu_s=0.016
+2025-11-30 03:53:47 | A-UT-03 | Resultado: OK | 2.227s
+REQ | GET / | 200 | latency_ms=0.47 | rss_diff=8192 | user_cpu_s=0.000 | system_cpu_s=0.000
+REQ | POST /usuarios/login/ | 200 | latency_ms=557.65 | rss_diff=184320 | user_cpu_s=0.422 | system_cpu_s=0.016
+REQ | GET /main | 200 | latency_ms=173.67 | rss_diff=90112 | user_cpu_s=0.047 | system_cpu_s=0.000
+REQ | GET /core/producto/update/1/ | 401 | latency_ms=129.58 | rss_diff=32768 | user_cpu_s=0.031 | system_cpu_s=0.000
+REQ | GET / | 200 | latency_ms=0.37 | rss_diff=0 | user_cpu_s=0.000 | system_cpu_s=0.000
+Fin. Duración total: 6.982s
+Inicio
+2025-11-30 03:53:55 | H-UT-01 | Resultado: OK | 0.000s
+2025-11-30 03:53:56 | H-UT-02 | Resultado: OK | 0.000s
 Fin. Duración total: 0.000s

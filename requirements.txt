@@ -1,0 +1,4 @@
+Django
+selenium
+webdriver-manager
+psutil
